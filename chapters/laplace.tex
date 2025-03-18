@@ -1,0 +1,342 @@
+\chapter{Transformada de Laplace}
+
+Em unidades curriculares anteriores, foi abordado (dentre outras coisas) a análise de circuitos como o da \fig{rc}.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{rc}
+	\begin{tikzpicture}[xscale=2.5, yscale=2]\draw
+		(0,1) to[V,l_=$v_i(t)$,i=$i(t)$] (0,0) -- (1,0)
+		(0,1) to[R,l=$R$] (1,1)
+		to[C,l_=$C$,v^=$v_o(t)$] (1,0);
+	\end{tikzpicture}
+	\caption{Circuito RC.}
+	\label{fig:rc}
+\end{figure}
+
+Pela Lei das Tensões de Kirchoff, a análise do circuito resulta no seguinte sistema de \ac{edo}
+
+\begin{equation}\label{eq:edo}
+	\begin{cases}
+		\displaystyle\diff{i(t)}{t}+\frac{1}{RC}i(t)=\frac{1}{R}\diff{v_i(t)}{t}\\
+		\displaystyle\diff{v_o(t)}{t}=\frac{1}{C}i(t)
+	\end{cases},
+\end{equation}
+cuja solução (para $t\geq0$) deve satisfazer a condição inicial $v_o(0)$ --- a tensão inicial do capacitor.
+
+A grande maioria dos alunos não tem uma experiência agradável modelando e resolvendo circuitos dessa maneira. Sistemas de \ac{edo} são trabalhosos. Há a necessidade de uma apurada intuição para transformar a tensão inicial do capacitor numa condição adequada à solução da corrente de malha $i(t)$ e, posteriormente, para a obtenção analítica de $v_o(t)$.
+
+A \ac{tl}, é uma ferramenta útil que se aplica muito bem à solução de \ac{edo} (ou sistemas de \ac{edo}), como a \equ{edo}. A \ac{tl} de uma função real $x(t)$ é definida por
+\begin{equation}\label{eq:tl}
+	\boxed{X(s)=\inte{x(t)e^{-st}}{t}{0}{\infty}},
+\end{equation}
+sendo $s$ uma variável complexa e $X(s)$ uma função complexa --- correspondendo à representação de $x(t)$ no domínio de Laplace. Dizemos que $x(t)$ e $X(s)$ formam um par transformado de Laplace $x(t)\longleftrightarrow X(s)$.
+
+O domínio de Laplace não possui uma interpretação física simples. Seu poder e utilidade está na simplificação da trabalho matemático necessário para resolver sistemas como da \equ{edo}. Por exemplo, pela \emph{propriedade de diferenciação}\footnote{A prova da \equ{dtl} envolve uma elaborada integração por partes além de uma análise de limites dependendo da continuidade de $x(t)$ na origem ($t=0$).} da \ac{tl}
+\begin{equation}\label{eq:dtl}
+	\diff{x(t)}{t}\longleftrightarrow sX(s)-x(0).
+\end{equation}
+
+Assim, aplicando a \ac{tl} sobre as equações de tensão e corrente sobre um resitor
+\begin{equation*}
+	v(t)=Ri(t)\longleftrightarrow V(s)=RI(s)
+\end{equation*}
+e um capacitor
+\begin{equation*}
+	i(t)=C\diff{v(t)}{t}\longleftrightarrow I(s)=C(V(s)-v(0)).
+\end{equation*}
+Tomando \emph{condições iniciais nulas} --- $v(0)=0$, para o capacitor --- podemos definir as \emph{impedâncias} ($Z(s)=V(s)\slash I(s)$) desses elementos como: $Z(s)=R$ para o resistor; e $Z(s)=1\slash sC$ para o capacitor. Assim, o circuito da \fig{rc} pode ser redesenhado como na \fig{dr}.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{dr}
+	\begin{tikzpicture}[xscale=2.5, yscale=2]\draw
+		(0,1) to[V,l_=$V_i(s)$,i=$I(s)$] (0,0) -- (1,0)
+		(0,1) to[european resistor,l=$R$] (1,1)
+		to[european resistor,l_=$\displaystyle\frac{1}{sC}$,v^=$V_o(s)$] (1,0);
+	\end{tikzpicture}
+	\caption{Divisor \enquote{resistivo} de tensão.}
+	\label{fig:dr}
+\end{figure}
+
+A representação dos componentes de circuito através de suas impedâncias facilita a análise, pois as regras básicas de análise para redes puramente resistivas valem. Assim, aplicando o resultado do \emph{divisor resistivo de tensão}, podemos escrever
+\begin{equation}\label{eq:dr}
+	V_o(s)=\frac{\frac{1}{sc}}{R+\frac{1}{sC}}V_i(s).
+\end{equation}
+
+Por definição, a razão entre a \ac{tl} de uma variável de saída e a \ac{tl} de uma variável de entrada é chamada de \emph{função de transferência}. Para nossos circuitos, as funções de transferência serão denotadas por $H(s)$. Reescrevendo a \equ{dr}
+\begin{equation*}
+	\frac{V_o(s)}{V_i(s)}=H(s)=\frac{\frac{1}{sC}}{R+\frac{1}{sC}}
+\end{equation*}
+e simplificando
+\begin{equation}
+	H(s)=\frac{1}{RCs+1}=\frac{\frac{1}{RC}}{s+\frac{1}{RC}}.
+\end{equation}
+
+O circuito da \fig{rc} é um dos circuitos não"-triviais mais simples que podemos esperar analisar. Um entendimento mais robusto da \ac{tl} e suas aplicações em análise de circuitos são necessários para casos típicos mais intricados. Para fundamentar essa habilidade, uma mínima revisão teórica (ainda que limitada a aspectos práticos de utilidade imediata) é necessária.
+
+\section{Definição da transformada de Laplace}
+
+Retomando da definição da \ac{tl} na \equ{tl}, reescrita abaixo
+\begin{equation*}
+	X(s)=\inte{x(t)e^{-st}}{t}{0}{\infty},
+\end{equation*}
+podemos motivar sua necessidade através de um exemplo simples.
+
+A função \emph{degrau unitário}, também conhecida como função de Heaviside, representada comumente por $u(t)$ é definida por
+\begin{equation}\label{eq:heaviside}
+	\boxed{u(t)=\begin{cases}
+		0\quad&t<0;\\
+		1\quad&t\geq0;
+	\end{cases}},
+\end{equation}
+é largamente utilizada para representar acionamentos em circuitos. Sua \ac{tl} pode ser obtida por
+\begin{align*}
+	U(s)&=\inte{u(t)e^{-st}}{t}{0}{\infty}=\inte{e^{-st}}{t}{0}{\infty}\\
+		&=\frac{e^{-st}}{-s}\bigg|_{0}^{\infty}=\frac{e^{-s\infty}-e^{-s0}}{-s}.
+\end{align*}
+Caso $\Re(s)>0$, temos que $e^{-s\infty}\to0$, então
+\begin{equation*}
+	U(s)=\frac{1}{s}\quad\Re(s)>0.
+\end{equation*}
+
+A notação $\Re(s)>0$ representa a \emph{região de convergência} da \ac{tl}. Ou seja, os valores de $s$ para os quais a relação
+\begin{equation}\label{eq:tlheaviside}
+	\boxed{u(t)\longleftrightarrow\frac{1}{s}}
+\end{equation}
+vale. Em nossos estudos, não haverá a necessidade de considerarmos a região de convergência. Ademais, em várias aplicações, fica pressuposto que a análise se restringe \emph{exclusivamente} para $t\geq0$, ou mesmo $t>0$. Em ambos os casos, o degrau unitário se reduz à unidade ($u(t)=1$), conforme a \equ{heaviside}. Assim, pode"-se encontrar a \equ{tlheaviside} na notação alternativa
+\begin{equation}
+	1\longleftrightarrow\frac{1}{s}.
+\end{equation}
+
+A obtenção de pares transformados de Laplace, como a \equ{tlheaviside} é um simples exercício em Cálculo Diferencial e Integral sobre funções reais. Há uma ampla disponibilidade de tabelas de pares transformados na literatura. Não está no escopo desta unidade curricular a derivação exaustiva desses pares transformados.
+
+\subsection{Cálculo simbólico da transformada de Laplace}
+
+Na eventualidade de um par transformado desconhecido ser necessário, eles podem ser calculados através do Symbolic Math Toolbox do Matlab\textsuperscript{®}. Sua documentação pode ser encontrada em \url{https://www.mathworks.com/help/symbolic/}.
+
+Como exemplo, vamos repetir a \ac{tl} do degrau unitário:
+\begin{lstlisting}
+>> syms s
+>> syms t real
+>> u = heaviside(t);
+>> U = laplace(u, t, s)
+U = 
+1/s
+\end{lstlisting}
+
+Maiores detalhes sobre o Symbolic Math Toolbox e suas funções serão abordadas em um material dedicado.
+
+\section{Transformada inversa de Laplace}
+
+Vamos tomar agora a função de transferência do circuito da \fig{rc} e assumir que a tensão de entrada $v_i(t)$ é um degrau unitário. Assim, como $V_o(s)=H(s)V_i(s)$, podemos escrever
+\begin{equation*}
+	V_o(s)=\Big(\frac{\frac{1}{RC}}{s+\frac{1}{RC}}\Big)\Big(\frac{1}{s}\Big).
+\end{equation*}
+Embora seja possível expandir a multiplicação indicada, isso não avança nossa causa. Desejamos obter a tensão de saída $v_o(t)$ (para $t\geq0$), porém o que temos é sua representação no domínio de Laplace. Precisamos da transformada inversa!
+
+A \ac{til} é definida por
+\begin{equation}\label{eq:til}
+	\boxed{x(t)=\frac{1}{j2\pi}\inte{X(s)e^{st}}{s}{\sigma-j\infty}{\sigma+j\infty}},
+\end{equation}
+que é substancialmente mais complicada que a \equ{tl} que define a \ac{tl}. Mais importante, a integral é sobre uma variável complexa $s$ e isso a torna (muito) diferente da integração real! Além disso, o parâmetro real $\sigma$ nos limites de integração pode ser qualquer valor dentro da região de convergência, o que é contraintuitivo\footnote{Afinal, aprendemos que o resultado da integral muda, se mudarmos os limites. Mas esse não é o caso para integrais sobre variáveis complexas.}.
+
+A solução da \equ{til} foge muito ao ferramental matemático de graduação para Engenharias. Tanto que soluções algebricamente trabalhosas são propostas para sua abordagem --- expansão em frações parciais, seguida de busca em tabelas de pares transformados e propriedades. Aqui optarei por um caminho mais simples, do ponto de vista do trabalho algébrico envolvido.
+
+O \emph{teorema dos resíduos de Cauchy} estabelece a seguinte igualdade:
+\begin{equation}\label{eq:cauchy}
+	\frac{1}{j2\pi}\inte{X(s)e^{st}}{s}{\sigma-j\infty}{\sigma+j\infty}=\sum_{p_k}\res\big(X(s)e^{st};p_k\big),
+\end{equation}
+onde $p_k$ é cada um dos polos de $X(s)$. Polos são as raízes do denominador. A notação $\res(\cdot)$ representa um \emph{resíduo}, dado por
+\begin{equation}\label{eq:res}
+	\res\big(X(s)e^{st};p_k\big)=\lim_{s\to p_k}\big((s-p_k)X(s)e^{st}\big).
+\end{equation}
+
+Em nosso exemplo, os polos de $V_o(s)$ são dois: $p_1=-\frac{1}{RC}$; e $p_2=0$. Assim, temos
+\begin{align*}
+	\res\big(V_o(s)e^{st};{\textstyle\frac{-1}{RC}}\big)&=\lim_{s\to\frac{-1}{RC}}({\textstyle s+\frac{1}{RC}})\frac{\frac{1}{RC}}{s+\frac{1}{RC}}\frac{1}{s}e^{st}\\
+	&=\lim_{s\to\frac{-1}{RC}}\frac{\frac{1}{RC}}{s}e^{st}\\
+	&=\frac{\frac{1}{RC}}{-\frac{1}{RC}}=-e^{-t\slash RC}
+\end{align*}
+e
+\begin{align*}
+	\res\big(V_o(s)e^{st};0\big)&=\lim_{s\to0}s\frac{\frac{1}{RC}}{s+\frac{1}{RC}}\frac{1}{s}e^{st}\\
+	&=\lim_{s\to0}\frac{\frac{1}{RC}}{s+\frac{1}{RC}}e^{st}\\
+	&=1.
+\end{align*}
+
+Assim, pelo teorema dos resíduos de Cauchy, $v_o(t)$ para $t\geq0$ fica dado por
+\begin{equation}\label{eq:cc}
+	v_o(t)=1-e^{-t/RC},
+\end{equation}
+que possui o aspecto típico da equação de carga de um capacitor. Plotando a \equ{cc}, produzimos a \fig{cc}.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{cc}
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$t/RC$, ylabel=$v_o(t)/V$, xmin=0, xmax=6, ymin=0, grid=major]
+			\addplot[thick] gnuplot [id=cc,raw gnuplot]{%
+				f(x)=1-exp(-x);
+				plot [0:6] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Resposta ao degrau do circuito RC teste teste teste.}
+	\label{fig:cc}
+\end{figure}
+
+A análise da \fig{cc} confirma a ideia da curva de carga de um capacitor. A resposta a um degrau unitário é uma análise temporal de grande relevância, pois o acionamento em degrau modela a mais simples das manobras em um circuito: ligar\slash desligar um interruptor.
+
+Há diferentes formas de chegarmos à essa (ou qualquer outra) solução:
+\begin{itemize}
+	\item através do sistema de \ac{edo} da \equ{edo} --- explorando a resposta natural (solução homogênea) e a resposta forçada (solução particular), sendo capaz de resolver um \ac{pvi};
+	\item através da aplicação da \ac{tl} sobre o sistema de \ac{edo}, porém sem anular as condições iniciais --- ganha"-se a solução do \ac{pvi} e perde"-se a função de transferência;
+	\item como foi feito (anulando as condições iniciais), obtendo uma função de tranferência, porém perdendo a solução do \ac{pvi};
+	\item através da \emph{integral de convolução}, pela resposta impulsiva $h(t)$.
+\end{itemize}
+
+Essa última opção oferece \eng{insights} únicos, mas é bastante \enquote{esotérica}. A \ac{til} pode ser aplicada em $H(s)$ para obter a resposta impulsiva $h(t)$. Problemas de valor inicial necessitam de uma significativa sofisticação matemática e entendimento da função impulso unitário (também chamada de delta de Dirac), denotada por $\delta(t)$.
+
+A função impulso unitário não é uma função no sentido estrito, mas sim uma \emph{distribuição}. Foi desenvolvida originalmente para tratar cargas pontuais (como elétrons) na Física Quântica. Seu uso ganhou corrência na teoria de sinais e sistemas lineares e seus fundamentos. Junto da integral de convolução, dada por
+\begin{equation}\label{eq:conv}
+	\boxed{y(t)=\inte{x(\tau)h(t-\tau)}{\tau}{-\infty}{\infty}},
+\end{equation}
+fornecem um resultado poderoso e fundamental.
+
+A questão é: a \ac{tl} é aplicada justamente para evitarmos as dificuldades com o impulso unitário $\delta(t)$, a resposta ao impulso $h(t)$ e a necessidade de resolver a integral de convolução da \equ{conv}. Por essa razão, focaremos na função de transferência $H(s)$ e deixaremos as representações temporais em segundo plano.
+
+\subsection{Cálculo simbólico da transformada inversa de Laplace}
+
+Assim como na \ac{tl}, a \ac{til} também pode ser obtida por meios computacionais. Isso é últil em situações com muitos resíduos (alta ordem no denominador). Além disso, a \equ{res} é, na verdade, apenas o caso mais simples na definição dos resíduos. Sua forma é mais intricada caso algum dos polos se repita.
+
+Repetindo o cálculo já realizado através do Symbolic Math Toolbox, obtemos
+\begin{lstlisting}
+>> syms s
+>> syms t real
+>> syms R C real positive
+>> Vo = ((1/R/C)/(s+1/R/C))*(1/s);
+>> vo = ilaplace(Vo, s, t)
+vo =
+1 - exp(-t/(C*R))
+\end{lstlisting}
+confirmando o resultado obtido manualmente.
+
+\section{Análise de redes através da transformada de Laplace}
+
+Até o presente momento, nossa análise ficou limitada ao simples circuito da \fig{rc}. A análise simplificada através das impedâncias em $s$ oferece um caminho algebricamente mais curto, ainda que trabalhe com um nível de abstração mais alto.
+
+Caso a tensão de saída não seja tomada sobre o capacitor $C$, mas sobre o resitor $R$, toda a análise muda. Porém a obtenção da nova função de transferência é relativamente simples:
+\begin{equation*}
+	H(s)=\frac{R}{R+\frac{1}{sC}}=\frac{RCs}{RCs+1}=\frac{s}{s+\frac{1}{RC}}.
+\end{equation*}
+
+Comparando as duas funções de transferência, vemos que ambas possuem um polo em $s=-1\slash RC$. Porém, enquanto a primeira possui um numerador constante (ordem zero), a segunda possui um zero --- uma raiz do numerador da função de transferência --- na origem.
+
+Apesar de estarmos operando sobre o mesmo circuito, a escolha entre as variáveis de entrada ou de saída produzem funções de transferência distintas. Como veremos: o funcionamento e interpretação desses circuitos é completamente diferente.
+
+Apenas para satisfazer uma eventual curiosidade, vamos obter a resposta ao degrau deste circuito:
+\begin{lstlisting}
+>> syms s
+>> syms t real
+>> syms R C real positive
+>> Vo = (s/(s+1/R/C))*(1/s);
+>> vo = ilaplace(Vo, s, t)
+vo =
+exp(-t/(C*R))
+\end{lstlisting}
+Ou seja
+\begin{equation*}
+	v_o(t)=e^{-t/RC},
+\end{equation*}
+o que, após breve consideração, é o resultado óbvio\footnote{Afinal, a soma das duas soluções deve resultar na unidade, que é o sinal de entrada.}.
+
+Porém, se tivermos uma rede com muitas malhas, ou muitos nós, de maneira que mesmo a análise por impedâncias ainda nos deixa com um significativo problema de Álgebra Linear nas mãos: um grande sistema de equações lineares. A experiência mostra que, mesmo um erro de sinal dos mais inocentes, jogam por terra horas de esforço e são a causa de muita frustração!
+
+Uma ideia interessante é automatizar, computacionalmente, o levantamento da função de transferência a partir de um circuito. Para tal, será utilizada uma \emph{análise de nós modificada}, através do Symbolic Math Toolbox do Matlab\textsuperscript{®}.
+
+\subsection{A netlist}
+
+Vamos tomar por exemplo um circuito mais complexo, cuja análise de nós ou de malhas seria mais custosa (e propensa a erros) para fazer à mão. O circuito da \fig{pi} representa uma topologia padrão para filtros passivos. A obtenção da sua função de transferência é um excelente exercício de avaliação para disciplinas de análise de circuitos elétricos. Porém, nós já estamos um pouco além disso.
+
+\begin{figure*}[tb]
+	\centering
+	\tikzsetnextfilename{pi}
+	\begin{tikzpicture}[xscale=2.5, yscale=2]\draw
+		(0,1) to[V,l_=$v_i(t)$] (0,0) node [ground]{0}
+		(0,1) to[R,l=$R_1$] (1,1)
+		to[C,l_=$C_1$,*-] (1,0) node [ground]{0}
+		(1,1) to[L,l=$L_2$,-*] (2,1)
+		to[C,l_=$C_3$] (2,0) node [ground]{0}
+		(2,1) to[short] (3,1)
+		to[R,l_=$R_2$,v^=$v_o(t)$] (3,0) node [ground]{0};
+		\node[anchor=south] at(0,1) {1};
+		\node[anchor=south] at(1,1) {2};
+		\node[anchor=south] at(2,1) {3};
+	\end{tikzpicture}
+	\caption{Topologia de Cauer, ordem 3.}
+	\label{fig:pi}
+\end{figure*}
+
+Analisando a \fig{pi}, vemos que a rede possui todos os seus nós numerados. Começando pelo terra, com número 0. A sequência dos números é imaterial, desde que sejam valores distintos. Essa enumeração ajuda a descrever o circuito através de uma \eng{netlist}. Até o início da década de 1990, quando computadores com recursos gráficos ainda não eram ubíquos, a descrição de circuitos em simuladores, como o SPICE, era feita dessa forma.
+
+A \eng{netlist} do circuito da \fig{pi} pode ser escrita como
+\begin{lstlisting}
+V1 1 0
+R1 1 2
+C1 2 0
+L2 2 3
+C3 3 0
+R2 3 0
+\end{lstlisting}
+e armazenada em um arquivo de texto. Vamos chamá"-lo de \lstinline{teste.cir}\footnote{A extensão \lstinline{.cir} é histórica. Ela não muda nada, no entanto. Poderia ser \lstinline{.txt} ou qualquer outra coisa.} por hora. O formato é simples, a primeira letra codifica o elemento de circuito, seguido por um número de identificação deste elemento. Os dois números subsequentes representam os nós para ligação do polo positivo e negativo, nesta ordem.
+
+No Matlab\textsuperscript{®}, vamos executar os seguintes comandos:
+\begin{lstlisting}
+>> fname = "teste.cir";
+>> scam
+\end{lstlisting}
+
+O arquivo \lstinline{teste.cir} deve estar no caminho ou na pasta corrente. Idem para o \eng{script} \lstinline{scam.m}, que pode ser obtido em \url{https://github.com/echeever/scam}. Esse \eng{script} processa a \eng{netlist} e retorna, dentre outras coisas, variáveis simbólicas com a tensão de cada nó.
+
+A função de transferência $H(s)$ pode ser obtida pela razão entre a tensão do nó 3 e do nó 1:
+\begin{lstlisting}
+>> H = v_3/v_1
+H =
+R2/(R1 + R2 + L2*s + ...
+C1*L2*R1*s^2 + C3*L2*R2*s^2 + ...
+C1*R1*R2*s + C3*R1*R2*s + ...
+C1*C3*L2*R1*R2*s^3)
+\end{lstlisting}
+
+Assim, chegamos (sem sofrimento) à função de transferência da \equ{pi}. Percebemos que $H(s)$ é intricada em relação aos valores dos componentes de circuito. A escolha desses valores, a partir de uma característica de funcionamento desejada, não parece óbvia.
+
+\begin{figure*}[tb]
+\begin{equation}\begin{aligned}\label{eq:pi}
+	H(s)&=\frac{R_2}{C_1C_3L_2R_1R_2s^3+(C_1L_2R_1+C_3L_2R_2)s^2+(L_2+C_1R_1R_2+C_3R_1R_2)s+R_1+R_2}\\
+		&=\frac{\displaystyle\frac{1}{R_1C_1L_2C_3}}{\displaystyle s^3+\Big(\frac{1}{R_1C_1}+\frac{1}{R_2C_3}\Big)s^2+\Big(\frac{1}{R_1C_1R_2C_3}+\frac{C_1+C_3}{C_1L_2C_3}\Big)s+\frac{R_1+R_2}{R_1C_1L_2R_2C_3}}.
+\end{aligned}\end{equation}
+\end{figure*}
+
+\section{Alguns detalhes importantes}
+
+A \ac{tl} definida na \equ{tl} é propriamente chamada de transformada \emph{unilateral} de Laplace. Isso porque seu limite inferior de integração é a origem ($t=0$). Essa transformada é útil para análise de funções de transferência em sistemas \emph{causais} e também para a solução de \ac{pvi}
+
+Existe a transformada \emph{bilateral} de Laplace. Nela, o limite inferior de integração é $-\infty$. Ela é mais geral e pode analisar as funções de tranferência de sistemas \emph{não"-causais}. Porém ela não é capaz de resolver \ac{pvi}
+
+Quando buscamos uma propriedade ou par transformado de Laplace em alguma referência, é de suma importância averiguarmos qual versão da \ac{tl} está sendo utilizada. Isso porque há algumas diferenças significativas. Nosso trabalho será feito sempre com a versão unilateral.
+
+Quando expressamos sinais de entrada ou de saída no domínio do tempo, muitas vezes está implícito se o domínio é $-\infty<t<\infty$, ou se é $t\geq0$. Isso está estreitamente relacionado com o uso do degrau unitário $u(t)$ para segmentar adequadamente a resposta --- além disso, também está relacionado com as versões unilateral ou bilateral da \ac{tl}. Em nossos trabalhos sempre vamos assumir que $t\geq0$.
+
+\subsection{Causalidade}
+
+Há alguns parágrafos você deve ter lido o termo \enquote{causalidade} e se perguntado sobre o significado disso. Um sistema causal é um sistema onde o sinal de saída só responde a uma mudança do sinal de entrada ao mesmo tempo, ou depois, que ela ocorre. Assim, a saída não antecipa a entrada.
+
+Embora a causalidade pareça uma imposição das leis naturais da Física, ela tem implicações significativas na modelagem matemática dos circuitos. Ela define que a região de convergência da \ac{tl} está sempre à direita do polo mais à direita (no plano $s$). Assim, a resposta impulsiva do sistema é sempre lateral direita --- $h(t)=0$, para $t<0$. Por essa razão, podemos usar apenas a versão unilateral da \ac{tl} e ignorar a versão bilateral.
+
+\subsection{Estabilidade}
+
+Como veremos mais adiante, também desejamos sistemas que sejam \emph{estáveis}. A estabilidade significa que, enquanto a entrada for um sinal de amplitude finita, a saída também será um sinal de amplitude finita. Mais uma vez, parece óbvio, porém há sistemas comuns que não são estáveis.
+
+Estabilidade é uma condição necessária para a convergência da tranformada de Fourier e, por consequência, para que um circuito possua resposta em frequência definida. No projeto de filtros, sempre buscamos sistemas estáveis.
+
+A combinação de causalidade e estabilidade implica que as funções de transferência desejáveis possua \emph{todos} os polos com parte real \emph{estritamente negativa}. Isso produz polinômios em $s$ que são \emph{definidos positivos} e são uma condição para a \emph{realizabilidade} do circuito, já que resistências, capacitâncias e indutâncias são sempre positivas.
