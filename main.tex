@@ -16,13 +16,18 @@
 		long=Equações Diferenciais Ordinárias Lineares e com Coeficientes Constantes}
 	\DeclareAcronym{pvi}{short=p.v.i.{},%
 		long=problema de valor inicial}
+	\DeclareAcronym{tif}{short=TIF,%
+		long=transformada inversa de Fourier}
 	\DeclareAcronym{til}{short=TIL,%
 		long=transformada inversa de Laplace}
+	\DeclareAcronym{tf}{short=TF,%
+		long=transformada de Fourier}
 	\DeclareAcronym{tl}{short=TL,%
 		long=transformada de Laplace}
 \usepackage{csquotes}
 \usepackage{mathtools}
 \usepackage{siunitx}
+	\sisetup{per-mode=symbol}
 \usepackage{url}
 \usepackage{listings}
 	\lstset{basicstyle=\ttfamily}
@@ -37,11 +42,19 @@
 	\tikzexternalize
 
 \setheadfoot{13pt}{25.29494pt}
+\setlength{\textwidth}{456pt}
+\setlength{\spinemargin}{70pt}
+\setlength{\foremargin}{70pt}
 \checkandfixthelayout
+
+\makeatletter
+\renewcommand*{\sin}{\mathop{\operator@font sen}\nolimits}
+\makeatother
 
 \newcommand*{\eng}[1]{\foreignlanguage{american}{\textit{#1}}}
 \newcommand*{\fig}[1]{Figura~\ref{fig:#1}}
 \newcommand*{\equ}[1]{Eq.~\eqref{eq:#1}}
+\newcommand*{\atan}{\ensuremath\operatorname{atan2}}
 \newcommand*{\diff}[2]{\ensuremath\frac{\mathrm{d}#1}{\mathrm{d}#2}}
 \newcommand*{\inte}[4]{\ensuremath\int_{#3}^{#4}#1\,\mathrm{d}#2}
 \newcommand*{\res}{\ensuremath\operatorname{Res}}
@@ -55,8 +68,10 @@
 \maketitle
 
 \tableofcontents
+\listoffigures
 
 \include{chapters/laplace.tex}
 \include{chapters/fourier.tex}
+\include{chapters/freqs.tex}
 
 \end{document}

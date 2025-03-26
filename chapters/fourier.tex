@@ -1,1 +1,197 @@
 \chapter{Transformada de Fourier}
+
+No Capítulo anterior foi apresentada uma breve introdução teórica e prática sobre a \ac{tl}. Como dito, a \ac{tl} traz várias vantagens na tratativa matemática de um circuito: evita a solução direta das \ac{edo}; contorna a necessidade de analisar a integral de convolução, a resposta impulsiva e a singularidade do impulso unitário; além de introduzir o útil conceito de \emph{impedância}, generalizando a resistência para componentes reativos. Tudo isso tem um custo: a interpretação física da \ac{tl} não é óbvia; e o fato da \emph{Análise Complexa} fazer parte dos seus fundamentos torna a transformada inversa um tanto \enquote{esotérica}.
+
+A \ac{tl} é uma transformação bastante generalista. Quase todas as funções reais $x(t)$ (interessantes num contexto de Engenharia) possuem uma \ac{tl} $X(s)$ para alguma região de convergência no plano $s$. A \ac{tf}, por sua vez, converge apenas para um tipo mais restrito de função. No entanto, a \ac{tf} descarta a necessidade de \emph{Análise Complexa}, sendo necessários apenas os fundamentos de \emph{Análise Real} comuns nos cursos de Cálculo Diferencial e Integral para Engenharias. Além disso, a interpretação física da \ac{tf} é simples e muito útil, com veremos a seguir.
+
+A forma mais comumente utilizada da \ac{tf} é definida por
+\begin{equation}\label{eq:tfo}
+	\boxed{X(\omega)=\inte{x(t)e^{-j\omega t}}{t}{-\infty}{\infty}},
+\end{equation}
+onde $X(\omega)$ é uma função complexa sobre a variável real $\omega$. A variável $\omega$ possui dimensão de \unit{\radian\per\second} e pode ser interpretada como frequência. Ou seja, a \ac{tf} pode ser vista como uma transformação que relaciona uma representação no tempo $x(t)$ com uma representação na frequência $X(\omega)$, através de um par transformado $x(t)\longleftrightarrow X(\omega)$.
+
+São evidentes os paralelos entre a \ac{tl}, definida na \equ{tl} e a \ac{tf}, definida na \equ{tfo}. A \ac{tf} parece ser a \ac{tl} bilateral tomando $s=j\omega$ (ou seja, anulando a parte real $\sigma$. Essa análise possui as seguintes implicações:
+\begin{enumerate}
+	\item Para um sinal de tensão $v(t)$ ou de corrente $i(t)$, a \ac{tf}\footnote{Para sinais fisicamente realizáveis, a \equ{tfo} é sempre convergente.} ($V(\omega)$ ou $I(\omega)$) pode ser interpretada como o conteúdo de frequência (ou \emph{espectro} deste sinal;
+	\item Para um circuito com resposta impulsiva $h(t)$, caso a \equ{tfo} seja convergente, sua \ac{tf} $H(\omega)$ pode ser interpretado como a sua \emph{resposta em frequência}.
+\end{enumerate}
+
+Assim, de forma simples, caso a função de transferência $H(s)$ represente um sistema causal e estável, $\sigma=0$ pertence à região de convergência da \ac{tl}, de maneira que a substituição
+\begin{equation}
+	s=j\omega,
+\end{equation}
+é válida. Assim, para esses sistemas, a \ac{tf} não traz nada de novo: ela é um caso particular da \ac{tl}. A mesma coisa ocorre para a ampla maioria dos sinais de interesse. Porém, há excessões importantes.
+
+\section{A transformada generalizada de Fourier}
+
+Existem três situações onde a integral de Riemann da \equ{tfo} não é convergente, porém onde a importância do resultado (até pela obviedade na interpretação) exige ferramentas matemáticas mais sofisticadas: integração de Lebesgue e teoria das distribuições.
+
+No escopo desta unidade curricular, não há justificativa para abordar essas provas em detalhe, de maneira que vamos apenas considerar os seguintes pares como válidos:
+\begin{align}
+	\delta(t)&\longleftrightarrow1\\
+	1&\longleftrightarrow2\pi\delta(\omega)\\
+	u(t)&\longleftrightarrow\frac{1}{j\omega}+\pi\delta(\omega)\\
+	e^{j\omega_0t}&\longleftrightarrow2\pi\delta(\omega-\omega_0)
+\end{align}
+
+\section{A transformada inversa de Fourier}
+
+A \ac{tif} fica definida pela substituição de $s=j\omega$ na \equ{til}, resultando em
+\begin{equation}\label{eq:tifo}
+	\boxed{x(t)=\frac{1}{2\pi}\inte{X(\omega)e^{j\omega t}}{\omega}{-\infty}{\infty}}.
+\end{equation}
+Como $\omega$ é uma variável real, não há nada de especial nesta integração, como ocorre com a \ac{til} da \equ{til}.
+
+Analisando as Eqs.~\eqref{eq:tfo} e \eqref{eq:tifo}, percebemos que, exceto pelo fator $\frac{1}{2\pi}$, há uma similaridade em sua estrutura: essa similaridade nos leva ao conceito de \emph{dualidade}. Esse conceito é útil para a obtenção de alguns pares transformados de Fourier, bem como na obtenção e interpretação de algumas das propriedades da \ac{tf}. Existe uma versão \emph{unitária} da \ac{tf} que, além de deixar a dualidade mais clara, também nos permite visualizar a frequência em uma unidade muito mais conveniente: \unit{\hertz}.
+
+\section{A tranformada unitária de Fourier}
+
+Vocês devem estar familiares com a equação $\omega=2\pi f$, onde $\omega$ representa uma frequência radial, dada em \unit{\radian\per\second}, e $f$ representa a frequência em \unit{\hertz}. Estamos habituados a trabalhar em hertz e a interpretação dos resultados fica muito mais direta, ademais, temos uma dualidade mais limpa.
+
+A \ac{tf} unitária pode ser definida por
+\begin{equation}\label{eq:tf}
+	\boxed{X(f)=\inte{x(t)e^{-j2\pi ft}}{t}{-\infty}{\infty}},
+\end{equation}
+enquanto a \ac{tif} unitária fica da forma
+\begin{equation}\label{eq:tif}
+	\boxed{x(t)=\inte{X(f)e^{j2\pi ft}}{f}{-\infty}{\infty}}.
+\end{equation}
+
+Nesta notação, os pares transformados da versão generalizada de Fourier podem ser reescritos como:
+\begin{align}
+	\delta(t)&\longleftrightarrow1\\
+	1&\longleftrightarrow\delta(f)\\
+	u(t)&\longleftrightarrow\frac{1}{j2\pi f}+\frac{\delta(f)}{2}\\
+	e^{j2\pi f_0t}&\longleftrightarrow\delta(f-f_0)
+\end{align}
+
+Assim, podemos estabelecer a seguinte estratégia:
+\begin{enumerate}
+	\item Usaremos a \ac{tl} com a notação em $s$ para todas as manipulações algébricas envolvendo sinais e funções de transferência;
+	\item Quando possível e conveniente, tomaremos $s\mapsto j\omega$ para buscar uma interpretação espectral em nossas análises;
+	\item Sempre que necessário, para refinar e\slash ou trazer inteligibilidade à nossa notação, vamos tomar $\omega\mapsto2\pi f$, especialmente nos passos finais da análise.
+\end{enumerate}
+
+\subsection{Confusão entre as notações}
+
+Ao buscar uma referência sobre \ac{tf} e suas aplicações, pares transformados e suas propriedades, é muito importante prestar atenção na definição usada na \ac{tf} e \ac{tif}. Assim como no caso das versões unilateral e bilateral da \ac{tl}, a notação pode ser diferente, ambígua e exatamente o oposto do definido aqui.
+
+É comum representar a frequência radial (em \unit{\radian\per\second}) tanto usando $\omega$, quanto por outra letra grega $\nu$ (nu). Por outro lado, a frequência comum (em \unit{\hertz}) é comumente dada por $f$, porém em alguns contextos, por $\nu$. Não se prenda às variáveis. Averigue sempre a forma das equações das transformadas direta e inversa.
+
+\subsection{Frequências negativas?}
+
+O estudante atento pode ter notado uma curiosidade: a \ac{tf} prevê a existência de frequências negativas. Elas existem de fato?
+
+Sinais fisicamente realizáveis (assim como sistemas fisicamente realizáveis) são reais, pois o Universo é real. No entanto, os número complexos nos permitem algumas vantagens algébricas e nós nos valemos deles, porém com alguma perda interpretativa por abstração matemática.
+
+Historicamente, a análise de Fourier foi desenvolvida utilizando senos e cossenos. Nesses casos, percebemos que a interpretação de frequências negativas é uma questão sem sentido, pois:
+\begin{gather*}
+	\cos(-\omega t)=\cos(\omega t);\\
+	\sin(-\omega t)=-\sin(\omega t).
+\end{gather*}
+
+Para um cosseno, a paridade da função torna qualquer frequência negativa indistinguível da frequência positiva correspondente. Já no caso na função seno, uma frequência negativa é indistinguível de uma inversão de fase de \qty{180}{\degree}. Ou seja, em ambos os casos, não há \emph{observabilidade} de uma frequência negativa.
+
+Os senos e cossenos possuem expressões complicadas quando são multiplicados entre si. Isso torna a análise de uma transformada \emph{trigonométrica} de Fourier de difícil tratamento analítico. Funções exponenciais, por outro lado, possuem simples propriedades quando são multiplicadas entre si e estão estreitamente relacionadas às funções trigonométricas, pois
+\begin{equation}\label{eq:euler}
+	e^{\pm j\theta}=\cos\theta\pm j\sin\theta,
+\end{equation}
+de maneira que a transformada \emph{exponencial} de Fourier ganhou destaque em sua utilização.
+
+Finalmente: sinais reais não possuem frequências negativas e sua representação é um \emph{artefato} da \ac{tf}. Por outro lado, sinais complexos têm sim frequências positivas e negativas distintas. Porém sinais complexos não existem na prática --- apesar de serem um bom modelo matemático em diversas aplicações, especialmente em Telecomunicações.
+
+\section{Cálculo simbólico da transformada de Fourier e sua inversa}
+
+Novamente, assim como na \ac{tl} e \ac{til}, o Symbolic Math Toolbox do Matlab\textsuperscript{®} nos fornece as funções \lstinline{fourier()} e \lstinline{ifourier()} para o cômputo da \ac{tf} e \ac{tif}, respectivamente.
+
+Por padrão, o Matlab\textsuperscript{®} utiliza as definições das Eqs.~\eqref{eq:tfo} e \eqref{eq:tifo}. Caso o usuário deseje mudar isso para as definições das Eqs.~\eqref{eq:tf} e \eqref{eq:tif}, ele deve executar:
+\begin{lstlisting}
+>> sympref('FourierParameters', ...
+      sym([1 -2*pi]));
+\end{lstlisting}
+alternativamente, caso queria voltar ao \eng{default}, basta executar:
+\begin{lstlisting}
+>> sympref('FourierParameters', ...
+      sym([1 -1]));
+\end{lstlisting}
+
+Maiores detalhes sobre o uso dessas funções serão abordados em um material à parte.
+
+\section{A resposta em frequência de circuitos}
+
+Retomando a análise do circuito da \fig{rc}, cuja função de transferência da \equ{Hrc} é repetida abaixo para simples referência (lembrando que $\tau=RC$):
+\begin{equation*}
+	H(s)=\frac{1}{RCs+1}=\frac{1}{\tau s+1}.
+\end{equation*}
+
+Como se trata de uma função de transferência causal e estável --- o polo $s=-1\slash\tau<0$ --- vale a substituição $s\mapsto j\omega$, de maneira que podemos obter a \ac{tf} na forma radial
+\begin{equation}
+	H(\omega)=\frac{1}{j\tau\omega+1}.
+\end{equation}
+
+A mistura de uma parametrização temporal $\tau$ com uma variável espectral $\omega$ não promove a maior clareza. Vamos definir uma frequência $\omega_c=1\slash\tau$, dada em \unit{\radian\per\second} e reescrever a \ac{tf}
+\begin{equation}
+	H(\omega)=\frac{1}{\displaystyle1+j\frac{\omega}{\omega_c}}.
+\end{equation}
+
+Como veremos mais adiante, o parâmetro $\omega_c$ é chamado de \emph{frequência de corte}. Porém, sua relação com $\omega$ e o valor de $H(\omega)$ não é muito clara, pois $H(\omega)$ é uma função complexa sobre a variável real $\omega$.
+
+Fazendo a decomposição cartesiana\footnote{$H(\omega)=\Re\big(H(\omega)\big)+j\Im\big(H(\omega)\big)$} de $H(\omega)$,
+\begin{equation*}\begin{aligned}
+	H(\omega)&=\frac{1}{\displaystyle1+j\frac{\omega}{\omega_c}}\cdot\frac{\displaystyle1-j\frac{\omega}{\omega_c}}{\displaystyle1-j\frac{\omega}{\omega_c}};\\
+			 &=\frac{\displaystyle1+j\frac{-\omega}{\omega_c}}{\displaystyle1+\Big(\frac{\omega}{\omega_c}\Big)^2},
+\end{aligned}\end{equation*}
+obtemos sua parte real
+\begin{equation}
+	\Re\big(H(\omega)\big)=\frac{1}{\displaystyle1+\Big(\frac{\omega}{\omega_c}\Big)^2}
+\end{equation}
+e sua parte imaginária
+\begin{equation}
+	\Im\big(H(\omega)\big)=\frac{\displaystyle-\frac{\omega}{\omega_c}}{\displaystyle1+\Big(\frac{\omega}{\omega_c}\Big)^2}.
+\end{equation}
+
+A decomposição cartesiana de $H(\omega)$ não possui interpretação física óbvia, porém costuma ser um passo necessário para chegar à decomposição polar\footnote{$H(\omega)=|H(\omega)|\angle H(\omega)$}, dadas por
+\begin{gather}
+	|H(\omega)|=\sqrt{\Re\big(H(\omega)\big)^2+\Im\big(H(\omega)\big)^2};\\
+	\angle H(\omega)=\tan^{-1}\bigg(\frac{\Im\big(H(\omega)\big)}{\Re\big(H(\omega)\big)}\bigg).
+\end{gather}
+
+Veremos que, na prática, é preferível trabalhar com $|H(\omega)|^2$, pois ele representa o ganho de energia\slash potência do sistema, trazendo assim uma interpretação física clara. A fase $\angle H(\omega)$ (em \unit{\radian}), embora clara o bastante em seu significado, possui dificuldades interpretativas no impacto de seu resultado.
+
+Para nosso circuito da \fig{cc}, temos então
+\begin{gather}
+	|H(\omega)|^2=\frac{1}{\displaystyle1+\Big(\frac{\omega}{\omega_c}\Big)^2};\\
+	\angle H(\omega)=-\tan^{-1}\bigg(\frac{\omega}{\omega_c}\bigg),
+\end{gather}
+que podem ser visualizadas nas Figs~\ref{fig:rcPow} e \ref{fig:rcPha}, respectivamente.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{rcPow}
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$\omega/\omega_c$, ylabel=$|H(\omega)|^2$, xmin=-10, xmax=10, ymin=0, ymax=1, grid=major]
+			\addplot[thick] gnuplot [id=rcPow,raw gnuplot]{%
+				set samples 201;
+				f(x)=1/(1+x**2);
+				plot [-10:10] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Resposta em magnitude do circuito RC.}
+	\label{fig:rcPow}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{rcPha}
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$\omega/\omega_c$, ylabel=$\angle H(\omega)/\unit{\radian}$, xmin=-10, xmax=10, ymin=-1.5708, ymax=1.5708, grid=major, ytick={-1.5708,0,1.5708}, yticklabels={$\displaystyle-\frac{\pi}{2}$,$0$,$\displaystyle\frac{\pi}{2}$}]
+			\addplot[thick] gnuplot [id=rcPha,raw gnuplot]{%
+				f(x)=-atan(x);
+				plot [-10:10] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Resposta em fase do circuito RC.}
+	\label{fig:rcPha}
+\end{figure}
+
+A análise das Figs~\ref{fig:rcPow} e \ref{fig:rcPha} evidenciam o comportamento \enquote{passa"-baixas} da resposta em magnitude do circuito da \fig{cc}. A interpretação da resposta em fase, no entanto, permanece elusiva.

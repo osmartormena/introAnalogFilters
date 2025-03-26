@@ -32,7 +32,13 @@ A \ac{tl}, é uma ferramenta útil que se aplica muito bem à solução de \ac{e
 \end{equation}
 sendo $s$ uma variável complexa e $X(s)$ uma função complexa --- correspondendo à representação de $x(t)$ no domínio de Laplace. Dizemos que $x(t)$ e $X(s)$ formam um par transformado de Laplace $x(t)\longleftrightarrow X(s)$.
 
-O domínio de Laplace não possui uma interpretação física simples. Seu poder e utilidade está na simplificação da trabalho matemático necessário para resolver sistemas como da \equ{edo}. Por exemplo, pela \emph{propriedade de diferenciação}\footnote{A prova da \equ{dtl} envolve uma elaborada integração por partes além de uma análise de limites dependendo da continuidade de $x(t)$ na origem ($t=0$).} da \ac{tl}
+O domínio de Laplace não possui uma interpretação física simples. A variável $s$ costuma ser apresentada por sua decomposição cartesiana: parte real ($\sigma$) e parte imaginária ($\omega$), na forma
+\begin{equation*}
+	s=\sigma+j\omega,
+\end{equation*}
+com unidades de \unit{\radian\per\second}.
+
+O poder e a utilidade da \ac{tl} está na simplificação da trabalho matemático necessário para resolver sistemas como da \equ{edo}. Por exemplo, pela \emph{propriedade de diferenciação}\footnote{A prova da \equ{dtl} envolve uma elaborada integração por partes além de uma análise de limites dependendo da continuidade de $x(t)$ na origem ($t=0$).} da \ac{tl}
 \begin{equation}\label{eq:dtl}
 	\diff{x(t)}{t}\longleftrightarrow sX(s)-x(0).
 \end{equation}
@@ -69,7 +75,7 @@ Por definição, a razão entre a \ac{tl} de uma variável de saída e a \ac{tl}
 	\frac{V_o(s)}{V_i(s)}=H(s)=\frac{\frac{1}{sC}}{R+\frac{1}{sC}}
 \end{equation*}
 e simplificando
-\begin{equation}
+\begin{equation}\label{eq:Hrc}
 	H(s)=\frac{1}{RCs+1}=\frac{\frac{1}{RC}}{s+\frac{1}{RC}}.
 \end{equation}
 
@@ -175,17 +181,19 @@ que possui o aspecto típico da equação de carga de um capacitor. Plotando a \
 	\centering
 	\tikzsetnextfilename{cc}
 	\begin{tikzpicture}
-		\begin{axis}[xlabel=$t/RC$, ylabel=$v_o(t)/V$, xmin=0, xmax=6, ymin=0, grid=major]
+		\begin{axis}[xlabel=$t/RC$, ylabel=$v_o(t)/\unit{\volt}$, xmin=0, xmax=6, ymin=0, grid=major]
 			\addplot[thick] gnuplot [id=cc,raw gnuplot]{%
 				f(x)=1-exp(-x);
 				plot [0:6] f(x)};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Resposta ao degrau do circuito RC teste teste teste.}
+	\caption{Resposta ao degrau do circuito RC.}
 	\label{fig:cc}
 \end{figure}
 
 A análise da \fig{cc} confirma a ideia da curva de carga de um capacitor. A resposta a um degrau unitário é uma análise temporal de grande relevância, pois o acionamento em degrau modela a mais simples das manobras em um circuito: ligar\slash desligar um interruptor.
+
+A \equ{cc}, conforme visualizada na \fig{cc}, também evidencia um aspecto particular da parametrização de \emph{circuitos de primeira ordem}\footnote{Circuitos que possuem apenas um componente reativo, irredutível por associações.}: a grandeza $RC$ possui dimensão de tempo, em \unit{\second}. É comum denominar a \emph{constante de tempo} $\tau=RC$. Uma aproximação amplamente aceita na literatura especializada é que a resposta de um circuito de ordem unitária é dividida em duas partes: \emph{período transitório} ou \emph{transiente}; e \emph{regime permanente} ou, simplesmente, \emph{regime}. O limite entre essas duas regiões é arbitrário, porém amplamente aceito, com o valor de $t=5\tau$.
 
 Há diferentes formas de chegarmos à essa (ou qualquer outra) solução:
 \begin{itemize}
