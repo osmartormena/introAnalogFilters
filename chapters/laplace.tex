@@ -145,7 +145,7 @@ A \ac{til} é definida por
 \begin{equation}\label{eq:til}
 	\boxed{x(t)=\frac{1}{j2\pi}\inte{X(s)e^{st}}{s}{\sigma-j\infty}{\sigma+j\infty}},
 \end{equation}
-que é substancialmente mais complicada que a \equ{tl} que define a \ac{tl}. Mais importante, a integral é sobre uma variável complexa $s$ e isso a torna (muito) diferente da integração real! Além disso, o parâmetro real $\sigma$ nos limites de integração pode ser qualquer valor dentro da região de convergência, o que é contraintuitivo\footnote{Afinal, aprendemos que o resultado da integral muda, se mudarmos os limites. Mas esse não é o caso para integrais sobre variáveis complexas.}.
+que é mais complicada que a \equ{tl} que define a \ac{tl}. Mais importante, a integral é sobre uma variável complexa $s$ e isso a torna (muito) diferente da integração real! Além disso, o parâmetro real $\sigma$ nos limites de integração pode ser qualquer valor dentro da região de convergência, o que é contraintuitivo\footnote{Afinal, aprendemos que o resultado da integral muda, se mudarmos os limites. Mas esse não é o caso para integrais sobre variáveis complexas.}.
 
 A solução da \equ{til} foge muito ao ferramental matemático de graduação para Engenharias. Tanto que soluções algebricamente trabalhosas são propostas para sua abordagem --- expansão em frações parciais, seguida de busca em tabelas de pares transformados e propriedades. Aqui optarei por um caminho mais simples, do ponto de vista do trabalho algébrico envolvido.
 
@@ -316,14 +316,12 @@ C1*R1*R2*s + C3*R1*R2*s + ...
 C1*C3*L2*R1*R2*s^3)
 \end{lstlisting}
 
-Assim, chegamos (sem sofrimento) à função de transferência da \equ{pi}. Percebemos que $H(s)$ é intricada em relação aos valores dos componentes de circuito. A escolha desses valores, a partir de uma característica de funcionamento desejada, não parece óbvia.
+Assim, chegamos (sem grande sofrimento) à função de transferência da \equ{pi}. Percebemos que $H(s)$ é intricada em relação aos valores dos componentes de circuito. A escolha desses valores, a partir de uma característica de funcionamento desejada, não parece óbvia.
 
-\begin{figure*}[tb]
-\begin{equation}\begin{aligned}\label{eq:pi}
-	H(s)&=\frac{R_2}{C_1C_3L_2R_1R_2s^3+(C_1L_2R_1+C_3L_2R_2)s^2+(L_2+C_1R_1R_2+C_3R_1R_2)s+R_1+R_2}\\
-		&=\frac{\displaystyle\frac{1}{R_1C_1L_2C_3}}{\displaystyle s^3+\Big(\frac{1}{R_1C_1}+\frac{1}{R_2C_3}\Big)s^2+\Big(\frac{1}{R_1C_1R_2C_3}+\frac{C_1+C_3}{C_1L_2C_3}\Big)s+\frac{R_1+R_2}{R_1C_1L_2R_2C_3}}.
-\end{aligned}\end{equation}
-\end{figure*}
+\begin{gather}\label{eq:pi}
+	{\textstyle H(s)=\frac{R_2}{C_1C_3L_2R_1R_2s^3+(C_1L_2R_1+C_3L_2R_2)s^2+(L_2+C_1R_1R_2+C_3R_1R_2)s+R_1+R_2}}\notag\\
+	H(s)=\frac{\frac{1}{R_1C_1L_2C_3}}{s^3+\big(\frac{1}{R_1C_1}+\frac{1}{R_2C_3}\big)s^2+\big(\frac{1}{R_1C_1R_2C_3}+\frac{C_1+C_3}{C_1L_2C_3}\big)s+\frac{R_1+R_2}{R_1C_1L_2R_2C_3}}.\raisetag{-1em}
+\end{gather}
 
 \section{Alguns detalhes importantes}
 

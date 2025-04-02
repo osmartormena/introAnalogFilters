@@ -1,0 +1,2 @@
+figures/bodeHhp.pdf: figures/bodeHhp.powHhp.table
+figures/bodeHhp.pdf: figures/bodeHhp.argHhp.table

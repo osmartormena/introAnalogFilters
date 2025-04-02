@@ -1,8 +1,7 @@
 \documentclass[%
-	a4paper,%
+	a5paper,%
 	extrafontsizes,%
 	oneside,%
-	twocolumn,%
 	final%
 	]{memoir}
 
@@ -11,6 +10,15 @@
 	latin,%
 	brazil%
 	]{babel}
+\usepackage{microtype}
+	\DeclareMicrotypeSet{lmodern}{%
+		encoding={T1},
+		family={rm*},
+		series={md*,it*,bf*,sl*},
+		size={normalsize,footnotesize}
+	}
+	\UseMicrotypeSet[protrusion]{lmodern}
+\usepackage{graphicx}
 \usepackage{acro}
 	\DeclareAcronym{edo}{short=EDO,%
 		long=Equações Diferenciais Ordinárias Lineares e com Coeficientes Constantes}
@@ -25,6 +33,7 @@
 	\DeclareAcronym{tl}{short=TL,%
 		long=transformada de Laplace}
 \usepackage{csquotes}
+\usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{siunitx}
 	\sisetup{per-mode=symbol}
@@ -34,22 +43,28 @@
 \usepackage[american]{circuitikz}
 \usepackage{pgfplots}
 	\pgfplotsset{compat=1.18}
-	\pgfplotsset{every axis/.append style={width=0.39\textwidth,height=0.2925\textwidth,scale only axis,/pgf/number format/.cd,use comma}}
+	\pgfplotsset{every axis/.append style={width=0.8\textwidth,height=0.6\textwidth,scale only axis,/pgf/number format/.cd,use comma}}
 	\pgfplotsset{every tick label/.append style={font=\footnotesize}}
 	\usetikzlibrary{external}
 	\tikzsetexternalprefix{figures/}
 	\tikzset{/tikz/external/up to date check=md5}
 	\tikzexternalize
+%	\tikzset{external/force remake}
 
 \setheadfoot{13pt}{25.29494pt}
-\setlength{\textwidth}{456pt}
-\setlength{\spinemargin}{70pt}
-\setlength{\foremargin}{70pt}
+\setlength{\textwidth}{320pt}
+\setlength{\spinemargin}{50pt}
+\setlength{\foremargin}{50pt}
+\setlength{\textheight}{496pt}
+\setlength{\uppermargin}{50pt}
+\setlength{\lowermargin}{50pt}
 \checkandfixthelayout
 
 \makeatletter
 \renewcommand*{\sin}{\mathop{\operator@font sen}\nolimits}
 \makeatother
+
+\allowdisplaybreaks[1]
 
 \newcommand*{\eng}[1]{\foreignlanguage{american}{\textit{#1}}}
 \newcommand*{\fig}[1]{Figura~\ref{fig:#1}}
@@ -65,9 +80,9 @@
 
 \begin{document}
 
-\maketitle
+\maketitle\clearpage
 
-\tableofcontents
+\tableofcontents*\clearpage
 \listoffigures
 
 \include{chapters/laplace.tex}

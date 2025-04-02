@@ -1,0 +1,2 @@
+figures/poloReal.pdf: figures/poloReal.powPoloReal.table
+figures/poloReal.pdf: figures/poloReal.gdPoloReal.table

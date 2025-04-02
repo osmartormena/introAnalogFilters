@@ -1,1 +1,316 @@
 \chapter{Resposta em frequência}
+
+No último Capítulo, finalizamos a introdução à \ac{tf} através da sua aplicação na visualização da resposta em frequência do circuito da \fig{rc}. Neste Capítulo seremos um pouco mais amplos e gerais, porém ainda baseados em circuitos RC bastante simples.
+
+As Figuras~\ref{fig:Hlp}, \ref{fig:Hhp}, \ref{fig:Hbp} e \ref{fig:Hsb} representam topologias simples de filtos \emph{passa"-baixas}, \emph{passa"-altas}, \emph{passa"-faixa} e \emph{rejeita"-faixa}, respectivamente. Por simplicidade, todos os valores de resistência $R$ e capacitância $C$ são idênticos.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{Hlp}
+	\begin{tikzpicture}[xscale=2.5, yscale=2]\draw
+		(0,1) to[V,l_=$v_i(t)$](0,0) -- (1,0)
+		(0,1) to[R,l=$R$] (1,1)
+		to[C,l_=$C$,v^=$v_o(t)$] (1,0);
+		\node[anchor=north] at(0.5,0) {0};
+		\node[anchor=south] at(0,1) {1};
+		\node[anchor=south] at(1,1) {2};
+	\end{tikzpicture}
+	\caption{Filtro RC passa"-baixas.}
+	\label{fig:Hlp}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{Hhp}
+	\begin{tikzpicture}[xscale=2.5, yscale=2]\draw
+		(0,1) to[V,l_=$v_i(t)$](0,0) -- (1,0)
+		(0,1) to[C,l=$C$] (1,1)
+		to[R,l_=$R$,v^=$v_o(t)$] (1,0);
+		\node[anchor=north] at(0.5,0) {0};
+		\node[anchor=south] at(0,1) {1};
+		\node[anchor=south] at(1,1) {2};
+	\end{tikzpicture}
+	\caption{Filtro RC passa"-altas.}
+	\label{fig:Hhp}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{Hbp}
+	\begin{tikzpicture}[xscale=1.5, yscale=2]\draw
+		(0,1) to[V,l_=$v_i(t)$](0,0) -- (3,0)
+		(0,1) to[R,l=$R$] (1,1)
+		to[C,l=$C$] (2,1) -- (3,1)
+		(2,1) to[R,l_=$R$,*-*] (2,0)
+		(3,1) to[C,l_=$C$,v^=$v_o(t)$](3,0);
+		\node[anchor=north] at(1.5,0) {0};
+		\node[anchor=south] at(0,1) {1};
+		\node[anchor=south] at(1,1) {2};
+		\node[anchor=south] at(2.5,1) {3};
+	\end{tikzpicture}
+	\caption{Filtro RC passa"-banda.}
+	\label{fig:Hbp}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{Hsb}
+	\begin{tikzpicture}[xscale=2, yscale=1.5]\draw
+		(0,1) to[V,l_=$v_i(t)$](0,0) -- (2,0)
+		(0,1) to[R,*-*,l=$R$] (1,1)
+		(0,1) -- (0,2) to[C,l=$C$] (1,2) -- (1,1)
+		(1,1) to[open,v^=$v_o(t)$] (1,0)
+		(1,1) to[R,l=$R$] (2,1)
+		to[C,l_=$C$] (2,0);
+		\node[anchor=north] at(1,0) {0};
+		\node[anchor=east] at(0,1.5) {1};
+		\node[anchor=south west] at(1,1) {2};
+		\node[anchor=south] at(2,1) {3};
+	\end{tikzpicture}
+	\caption{Filtro RC rejeita"-faixa.}
+	\label{fig:Hsb}
+\end{figure}
+
+Lembrando que $\tau=RC$, as funções de transferência dos filtros passa"-baixa $H_{\text{PB}}(s)$, passa"-alta $H_{\text{PA}}(s)$, passa"-faixa $H_{\text{PF}}(s)$ e rejeita"-faixa $H_{\text{RF}}(s)$ são dadas por
+\begin{gather}
+	H_{\text{PB}}(s)=\frac{1}{\tau s+1};\\
+	H_{\text{PA}}(s)=\frac{\tau s}{\tau s+1};\\
+	H_{\text{PF}}(s)=\frac{\tau s}{\tau^2s^2+3\tau s+1};\\
+	H_{\text{RF}}(s)=\frac{(\tau s+1)^2}{\tau^2s^2+3\tau s+1}.
+\end{gather}
+
+Como visto anteriormente, $\omega_c=1\slash\tau$. Assim, para a análise de Fourier, as respostas em frequência dos filtros são:
+\begin{gather}
+	H_{\text{PB}}(\omega)=\frac{1}{\displaystyle1+j\frac{\omega}{\omega_c}};\\
+	H_{\text{PA}}(\omega)=\frac{\displaystyle j\frac{\omega}{\omega_c}}{\displaystyle1+j\frac{\omega}{\omega_c}};\\
+	H_{\text{PF}}(\omega)=\frac{\displaystyle j\frac{\omega}{\omega_c}}{\displaystyle1-\frac{\omega^2}{\omega_c^2}+j3\frac{\omega}{\omega_c}};\\
+	H_{\text{RF}}(\omega)=\frac{\displaystyle1-\frac{\omega^2}{\omega_c^2}+j2\frac{\omega}{\omega_c}}{\displaystyle1-\frac{\omega^2}{\omega_c^2}+j3\frac{\omega}{\omega_c}}.
+\end{gather}
+
+\section{O diagrama de Bode}
+
+O diagrama de Bode representa a resposta em magnitude e em fase de uma função de transferência estável. Considerando que os sistemas sejam reais, as regras de \emph{simetria conjugada} de aplicam à \ac{tf}, assim:
+\begin{itemize}
+	\item a magnitude da \ac{tf} é par;
+	\item a fase da \ac{tf} é ímpar.
+\end{itemize}
+De maneira que podemos remover as frequências negativas da representação. Ademais, mostra"-se útil utilizar um gráfico em escala logarítmica no eixo das frequências. Finalmente, o valor da resposta em magnitude é expresso em decibéis (\unit{\decibel}).
+
+As respostas em magnitude, dadas por
+\begin{gather}
+	|H_{\text{PB}}(\omega)|^2=\frac{1}{\displaystyle1+\frac{\omega^2}{\omega_c^2}};\\
+	|H_{\text{PA}}(\omega)|^2=\frac{\displaystyle\frac{\omega^2}{\omega_c^2}}{\displaystyle1+\frac{\omega^2}{\omega_c^2}};\\
+	|H_{\text{PF}}(\omega)|^2=\frac{\displaystyle\frac{\omega^2}{\omega_c^2}}{\displaystyle1+7\frac{\omega^2}{\omega_c^2}+\frac{\omega^4}{\omega_c^4}};\\
+	|H_{\text{RF}}(\omega)|^2=\frac{\displaystyle1+2\frac{\omega^2}{\omega_c^2}+\frac{\omega^4}{\omega_c^4}}{\displaystyle1+7\frac{\omega^2}{\omega_c^2}+\frac{\omega^4}{\omega_c^4}},
+\end{gather}
+possuem apenas potências pares de $\omega$ em sua representação. O que é esperado, dada a paridade simétrica da magnitude. Por outro lado, as respostas em fase
+\begin{gather}
+	\angle H_{\text{PB}}(\omega)=-\tan^{-1}\Big(\frac{\omega}{\omega_c}\Big);\\
+	\angle H_{\text{PA}}(\omega)=\atan(\omega_c\omega,\omega^2);;\\
+	\angle H_{\text{PF}}(\omega)=\atan\Big(\frac{\omega_c^2\omega-\omega^3}{3},\omega_c\omega^2\Big);\\
+	\begin{aligned}
+	\angle H_{\text{RF}}(\omega)=\atan\bigg(\frac{\omega_c\omega(\omega^2-\omega_c^2)}{\omega^4+7\omega_c^2\omega^2+\omega_c^4},\\\frac{\omega^4+4\omega_c^2\omega^2+\omega_c^4}{\omega^4+7\omega_c^2\omega^2+\omega_c^4}\bigg),\end{aligned}
+\end{gather}
+apresentam apenas potências ímpares\footnote{O uso da função $\atan(\cdot)$ mascara essa relação.} de $\omega$, dada a anti"-simetria de sua paridade.
+
+As respostas em magnitude e em fase podem ser visualizadas nos diagramas de Bode das Figuras~\ref{fig:bodeHlp}--\ref{fig:bodeHsb}.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{bodeHlp}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[width=0.7\textwidth, xlabel=$\omega/\omega_c$, axis y line*=left, ylabel=$|H(\omega)|^2\slash\unit{\decibel}$, xmin=0.01, xmax=100, xmajorgrids=true]
+			\addplot[thick] gnuplot [id=powHlp,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=1/(1+x**2);
+				plot [0.01:100] 10*log10(f(x))};
+		\end{semilogxaxis}
+		\begin{semilogxaxis}[width=0.7\textwidth, hide x axis, axis y line*=right, ylabel=\textcolor{gray}{$\angle H(\omega)\slash\pi\unit{\radian}$}, xmin=0.01, xmax=100, ytick={0,-0.25,-0.5}, yticklabels={$0$,$-\frac{1}{4}$,$-\frac{1}{2}$}]
+			\addplot[gray, thick] gnuplot [id=argHlp,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=-atan(x);
+				plot [0.01:100] f(x)/pi};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode do filtro $H_{\text{PB}}(\omega)$.}
+	\label{fig:bodeHlp}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{bodeHhp}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[width=0.7\textwidth, xlabel=$\omega/\omega_c$, axis y line*=left, ylabel=$|H(\omega)|^2\slash\unit{\decibel}$, xmin=0.01, xmax=100, xmajorgrids=true]
+			\addplot[thick] gnuplot [id=powHhp,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=x**2/(1+x**2);
+				plot [0.01:100] 10*log10(f(x))};
+		\end{semilogxaxis}
+		\begin{semilogxaxis}[width=0.7\textwidth, hide x axis, axis y line*=right, ylabel=\textcolor{gray}{$\angle H(\omega)\slash\pi\unit{\radian}$}, xmin=0.01, xmax=100, ytick={0,0.25,0.5}, yticklabels={$0$,$\frac{1}{4}$,$\frac{1}{2}$}]
+			\addplot[gray, thick] gnuplot [id=argHhp,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=atan2(x,x**2);
+				plot [0.01:100] f(x)/pi};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode do filtro $H_{\text{PA}}(\omega)$.}
+	\label{fig:bodeHhp}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{bodeHbp}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[width=0.7\textwidth, xlabel=$\omega/\omega_c$, axis y line*=left, ylabel=$|H(\omega)|^2\slash\unit{\decibel}$, xmin=0.01, xmax=100, xmajorgrids=true]
+			\addplot[thick] gnuplot [id=powHbp,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=x**2/(1+7*x**2+x**4);
+				plot [0.01:100] 10*log10(f(x))};
+		\end{semilogxaxis}
+		\begin{semilogxaxis}[width=0.7\textwidth, hide x axis, axis y line*=right, ylabel=\textcolor{gray}{$\angle H(\omega)\slash\pi\unit{\radian}$}, xmin=0.01, xmax=100, ytick={0.5,0,-0.5}, yticklabels={$\frac{1}{2}$,$0$,$-\frac{1}{2}$}]
+			\addplot[gray, thick] gnuplot [id=argHbp,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=atan2((x-x**3)/3,x**2);
+				plot [0.01:100] f(x)/pi};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode do filtro $H_{\text{PF}}(\omega)$.}
+	\label{fig:bodeHbp}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{bodeHsb}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[width=0.7\textwidth, xlabel=$\omega/\omega_c$, axis y line*=left, ylabel=$|H(\omega)|^2\slash\unit{\decibel}$, xmin=0.01, xmax=100, xmajorgrids=true]
+			\addplot[thick] gnuplot [id=powHsb,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=(1+2*x**2+x**4)/(1+7*x**2+x**4);
+				plot [0.01:100] 10*log10(f(x))};
+		\end{semilogxaxis}
+		\begin{semilogxaxis}[width=0.7\textwidth, hide x axis, axis y line*=right, ylabel=\textcolor{gray}{$\angle H(\omega)\slash\pi\unit{\radian}$}, xmin=0.01, xmax=100, ytick={0.0625,0,-0.0625}, yticklabels={$\frac{1}{16}$,$0$,$-\frac{1}{16}$}, scaled ticks=false]
+			\addplot[gray, thick] gnuplot [id=argHsb,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=atan2((x**3-x)/(x**4+7*x**2+1),(x**4+4*x**2+1)/(x**4+7*x**2+1));
+				plot [0.01:100] f(x)/pi};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode do filtro $H_{\text{RF}}(\omega)$.}
+	\label{fig:bodeHsb}
+\end{figure}
+
+A interpretação física da resposta em magnitude é \enquote{óbvia}. Ela representa o ganho (ou atenuação) do filtro para uma determinada frequência. Infelizmente, o mesmo não pode ser dito da resposta em fase. Sua interpretação não é tão imediata e o fato de ser dada em radianos não ajuda.
+
+Ainda assim, a fase é um aspecto importantíssimo da resposta do filtro. Para tentar trazer um melhor entendimento, vamos apresentar duas representações alternativas: o \emph{atraso de fase}; e o \emph{atraso de grupo}.
+
+\section{Atraso de fase}
+
+O atraso de fase é definido por
+\begin{equation}
+	\tau_p(\omega)=-\frac{\angle H(\omega)}{\omega},
+\end{equation}
+sendo uma grandeza dada em segundos. Embora o atraso de fase seja relevante em algumas aplicações de telecomunicações, seus efeitos não são importantes para a análise de filtros seletivos em frequência. Esse tópico não será expandido.
+
+\section{Atraso de grupo}
+
+O atraso de fase é definido por
+\begin{equation}
+	\tau_g(\omega)=-\diff{\angle H(\omega)}{\omega},
+\end{equation}
+sendo uma grandeza dada em segundos. Sua interpretação é de grande valia na análise de filtros seletivos em frequência pois, a \emph{variação do atraso de grupo} indica uma \emph{distorção de fase} do sinal.
+
+Considerando as respostas dos filtros analisados neste Capítulo, os atrasos de grupo podem ser dados por:
+\begin{gather}
+	H_{\text{PB}}(\omega)\therefore\tau_g(\omega)=\frac{\tau}{1+\tau^2\omega^2};\\
+	H_{\text{PA}}(\omega)\therefore\tau_g(\omega)=\frac{\tau}{1+\tau^2\omega^2};\\
+	H_{\text{PF}}(\omega)\therefore\tau_g(\omega)=\frac{3\tau(1+\tau^2\omega^2)}{1+7\tau^2\omega^2+\tau^4\omega^4};\\
+	H_{\text{RF}}(\omega)\therefore\tau_g(\omega)=\frac{\tau-8\tau^3\omega^2+\tau^5\omega^4}{(1+7\tau^2\omega^2+\tau^4\omega^4)(1+\tau^2\omega^2)}.\raisetag{-1em}
+\end{gather}
+
+\section{Polos da função de transferência}
+
+Uma função de tranferência realizável $H(s)$ é formada por: um constante multiplicativa, zeros\footnote{Raízes do polinômio no numerador.} e polos\footnote{Raízes do polinômio no denominador.}. Respeitando as condições de realizabilidade, o filtro precisa ser causal e estável: de maneira que seus polos \emph{devem} possuir parte real \emph{estritamente negativa}.
+
+Há duas situações possíveis então: polos reais e pares de polos complexos conjugados.
+
+\subsection{Polos reais}
+
+Quando a raiz do denominador é real, o termo pode ser parametrizado por
+ \begin{equation}
+	 H(s)=\frac{1}{\tau s+1},
+ \end{equation}
+sendo $\tau$ a constante de tempo ($\tau>0$) e o polo $s=-1\slash\tau$ é estritamente negativo. Sistemas dessa natureza possuem resposta temporal no formato
+ \begin{equation}
+	 h(t)=Ae^{-t\slash\tau}\quad t\geq0,
+ \end{equation}
+onde $A$ é uma constante a determinar --- em conjunto com os outros polos do filtro e eventuais condições iniciais em um \ac{pvi}
+
+Reparametrizando a constante de tempo como uma frequência de corte $\omega_c=1\slash\tau$. Escrevemos a resposta em frequência em termos da resposta em magnitude
+\begin{equation}
+	|H(\omega)|^2=\frac{1}{\displaystyle1+\frac{\omega^2}{\omega_c^2}}
+\end{equation}
+e do atraso de grupo
+\begin{equation}
+	\tau_g(\omega)=\frac{\tau}{\displaystyle1+\frac{\omega^2}{\omega_c^2}}.
+\end{equation}
+
+Considerando que a relação entre a frequência radial e a frequência ordinária (em \unit{\hertz}) é dada por $\omega=2\pi f$, vamos, mais uma vez, reparamterizar a resposta em magnitude e o atraso de grupo:
+\begin{gather}
+	|H(f)|^2=\frac{1}{\displaystyle1+\frac{f^2}{f_c^2}};\\
+	\tau_g(f)=\frac{\tau}{\displaystyle1+\frac{f^2}{f_c^2}}.
+\end{gather}
+
+Finalmente, vamos expressar a resposta em magnitude em decibéis, pois $|H(f)|_{\unit{\decibel}}^2=10\log|H(f)|^2$, de forma que
+\begin{equation}
+	|H(f)|_{\unit{\decibel}}^2=-10\log\Big(1+\frac{f^2}{f_c^2}\Big).
+\end{equation}
+
+E, normalizando o atraso de grupo pela constante de tempo, podemos escrever
+\begin{equation}
+	\frac{\tau_g(f)}{\tau}=\frac{1}{\displaystyle1+\frac{f^2}{f_c^2}}.
+\end{equation}
+
+Com isso, podemos plotar o diagrama de Bode modificado da \fig{poloReal}. Onde a relação entre os parâmetros $\tau$ e $f_c$ é dada por
+\begin{equation}
+	f_c=\frac{1}{2\pi\tau}.
+\end{equation}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{poloReal}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[width=0.7\textwidth, xlabel=$f/f_c$, axis y line*=left, ylabel=$|H(f)|^2\slash\unit{\decibel}$, xmin=0.01, xmax=100, ymin=-40, ymax=0, ytick={0,-3.0103,-20,-40}, yticklabels={$0$,$-3$,$-20$,$-40$}, grid=major]
+			\addplot[thick] gnuplot [id=powPoloReal,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=-10*log10(1+x**2);
+				plot [0.01:100] f(x)};
+		\end{semilogxaxis}
+		\begin{semilogxaxis}[width=0.7\textwidth, hide x axis, axis y line*=right, ylabel=\textcolor{gray}{$\tau_g(f)\slash\tau$}, xmin=0.01, xmax=100, ymin=0, ymax=1, ytick={0,0.5,1}]
+			\addplot[gray, thick] gnuplot [id=gdPoloReal,raw gnuplot]{%
+				set logscale x 10;
+				f(x)=1/(1+x**2);
+				plot [0.01:100] f(x)};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode (modificado) de um polo real.}
+	\label{fig:poloReal}
+\end{figure}
+
+A análise da \fig{poloReal} evidencia o comportamento assintóticos da resposta em frequência, bem como o critério para a frequência de corte $f_c$ (ou $\omega_c$).
+\begin{gather*}
+	f\ll f_c\therefore\frac{f^2}{f_c^2}\to0\implies|H(f)|_{\unit{\decibel}}^2\approx-10\log(1)=\qty{0}{\decibel};\\
+	f\ll f_c\therefore\frac{f^2}{f_c^2}\to0\implies\tau_g(f)\approx\tau;\\
+	f=f_c\therefore\frac{f^2}{f_c^2}=1\implies|H(f)|_{\unit{\decibel}}^2=-10\log(\textstyle\frac{1}{2})\approx\qty{-3}{\decibel};\\
+	f=f_c\therefore\frac{f^2}{f_c^2}=1\implies\tau_g(f)=\frac{\tau}{2};\\
+	f\gg f_c\therefore\Big(1+\frac{f^2}{f_c^2}\Big)\to\frac{f^2}{f_c^2}\implies|H(f)|_{\unit{\decibel}}^2\approx-20\log\Big(\frac{f}{f_c}\Big);\\
+	f\gg f_c\therefore\frac{f^2}{f_c^2}\to\infty\implies\tau_g(f)\approx0.
+\end{gather*}
+
+Essa análise pode ser compreendida da seguinte forma:
+\begin{itemize}
+	\item Para frequências muito menores que a frequência de corte, a resposta em magnitude é plana (\qty{0}{\decibel}) e o atraso de grupo é constante ($\tau$~\unit{\second});
+	\item Na frequência de corte, o ganho de potência é exatamente \num{0.5}, o que equivale à \qty{-3.01}{\decibel}, aproximadamente. O ganho correspondente em amplitude é de $1\slash\sqrt{2}=\sqrt{2}\slash2$, aproximadamente \num{0.707}. Na vizinhança da frequência de corte ($\frac{f_c}{10}<f<10f_c$) também observamos quase a totalidade da variação do atraso de grupo --- distorção --- do filtro;
+	\item Para frequências muito maiores que a frequência de corte, a resposta em magnitude é uma reta com inclinação de $-20$~\unit{dB}\slash dec (decibéis por década). O atraso de grupo se aproxima, assintoticamente, de zero.
+\end{itemize}
+
+\subsection{Par de polos complexos conjugados}

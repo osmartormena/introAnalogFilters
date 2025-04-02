@@ -1,0 +1,2 @@
+figures/bodeHsb.pdf: figures/bodeHsb.powHsb.table
+figures/bodeHsb.pdf: figures/bodeHsb.argHsb.table
