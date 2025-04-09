@@ -1,0 +1,3 @@
+figures/poloConjMag.pdf: figures/poloConjMag.powPoloConjMagQ1.table
+figures/poloConjMag.pdf: figures/poloConjMag.powPoloConjMagQ2.table
+figures/poloConjMag.pdf: figures/poloConjMag.powPoloConjMagQ3.table

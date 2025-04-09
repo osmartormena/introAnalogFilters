@@ -1,0 +1,199 @@
+\chapter{Aproximações reais}
+
+No Capítulo anterior, foi analisado em detalhe a resposta em frequência de circuitos com polos reais ou pares de polos complexos conjugados. A literatura especializada oferece grande abundância de circuitos que implementam funções de transferência dessa natureza, porém, isso nem sempre é suficiente para atender às especificações de um problema de filtragem.
+
+Neste Capítulo, discutiremos a questão da especificação de uma resposta em frequência, bem como a ideia das aproximações reais do problema de filtragem analógica seletiva em frequência.
+
+Para simplicidade do desenvolvimento matemático, as aproximações serão vistas tomando um \emph{protótipo passa"-baixas normalizado}, ou seja, um filtro passa"-baixas cuja frequência de corte é de \qty{1}{\radian\per\second} ($\approx$\qty{0.16}{\hertz}).
+
+Adicionalmente, por simplicidade da notação, vamos definir uma grandeza chamada de \emph{atenuação}, denotada por $A(\omega)$. Sua relação com a magnitude quadrática é dada por
+\begin{equation}
+	A(\omega)=\frac{1}{|H(\omega)|^2}.
+\end{equation}
+
+A seguir serão discutidas e apresentadas as particularidades das aproximações de Butterworth, Chebyshev e Bessel. Essas aproximações possuem equacionamento mais simples, pois seus filtros passa"-baixa possuem apenas polos (\eng{all-poles}).
+
+\section{Aproximação de Butterworth}
+
+Em 1930 o físico inglês Stephen Butterworth publicou um arigo intulado \eng{\enquote{On the Theory of Filter Amplifiers}}. Neste trabalho, Butterworth defendeu a ideia que bons filtros não apresentam oscilação na resposta em magnitude, ou seja, possuem resposta monotônica. Um filtro passa"-baixas de Butterworth possui resposta em magnitude estritamente decrescente em função da frequência.
+
+A solução apresentada por Butterworth para um protótipo passa"-baixas normalizado possui a seguinte resposta em magnitude:
+\begin{equation}\label{eq:buttap}
+	|H(\omega)|^2=\frac{1}{1+\omega^{2N}},
+\end{equation}
+onde $N\in\mathbb{N}^*$ é a ordem\footnote{Equivalente ao número de componentes reativos irredutíveis por associação.} do filtro.
+
+A atenuação do filtro é dada então por $A(\omega)=1+\omega^{2N}$. A inspeção da \fig{abuttap} indica que não há oscilações na resposta em magnitude --- a atenuação é uma função crescente de $\omega$. Independente da ordem $N$, a atenuação sempre vale \qty{3}{\decibel} para $\omega=$\qty{1}{\radian\per\second}.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{abuttap}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[xlabel=$\omega$\slash(\unit{\radian\per\second}), ylabel=$A(\omega)$\slash\unit{\decibel}, xmin=0.01, xmax=100, ymin=0, ymax=60, grid=major, legend pos=north west]
+			\addplot[thick, dotted] gnuplot [id=abuttap1, raw gnuplot]{%
+				set logscale x 10;
+				N = 1;
+				f(x)=1+x**(2*N);
+				plot [0.01:100] 10*log10(f(x))};
+			\addplot[thick, dashdotted] gnuplot [id=abuttap2, raw gnuplot]{%
+				set logscale x 10;
+				N = 2;
+				f(x)=1+x**(2*N);
+				plot [0.01:100] 10*log10(f(x))};
+			\addplot[thick, dashed] gnuplot [id=abuttap3, raw gnuplot]{%
+				set logscale x 10;
+				N = 3;
+				f(x)=1+x**(2*N);
+				plot [0.01:100] 10*log10(f(x))};
+			\addplot[thick] gnuplot [id=abuttap4, raw gnuplot]{%
+				set logscale x 10;
+				N = 4;
+				f(x)=1+x**(2*N);
+				plot [0.01:100] 10*log10(f(x))};
+			\legend{$N=1$, $N=2$, $N=3$, $N=4$};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Atenuação do filtro de Butterworth.}
+	\label{fig:abuttap}
+\end{figure}
+
+O filtro de Butterworth é conhecido por ter \emph{banda de passagem maximamente plana}. Isso significa que para frequências abaixo da frequência de corte, o ganho é tão próximo da unidade (\qty{0}{\decibel}) quanto possível. A análise das derivadas de $A(\omega)$ na origem indicam isso:
+\begin{align*}
+	\diffn{A(\omega)}{\omega}{0}=1+\omega^{2N}&\implies\diffn{A(\omega)}{\omega}{0}\bigg|_{\omega=0}=1;\\
+	\diffn{A(\omega)}{\omega}{1}=2N\omega^{2N-1}&\implies\diffn{A(\omega)}{\omega}{1}\bigg|_{\omega=0}=0;\\
+	\diffn{A(\omega)}{\omega}{2}=2N(2N-1)\omega^{2N-2}&\implies\diffn{A(\omega)}{\omega}{2}\bigg|_{\omega=0}=0;\\
+	&\cdots\\
+	\diffn{A(\omega)}{\omega}{2N}=(2N)!&\implies\diffn{A(\omega)}{\omega}{2N}\bigg|_{\omega=0}=(2N)!.\\
+\end{align*}
+
+Na origem, $A(\omega)$ é unitária, porém todas as suas derivadas são nulas, exceto a de mais alta ordem ($2N$). Isso indica uma forte tendência em manter o ganho unitário.
+
+\subsection{Os polos do filtro de Butterworth}
+
+A aproximação de Butterworth parece estar embasada em boas ideias. Resta a questão: \enquote{qual a função de transferência que possui uma resposta desse tipo?} Vamos discutir aqui, em detalhe, como são calculados os polos de Butterworth.
+
+Conforme visto anteriormente, a resposta em frequência $H(\omega)$ é uma função complexa sobre a variável real $\omega$. Assim, sua magnitude quadrática pode ser escrita como $|H(\omega)|^2=H(\omega)\conj{H(\omega)}$, onde $\conj{(\cdot)}$ denota a conjugação complexa.
+
+Em razão das propriedades de simetria conjugada da \ac{tf}, chegamos à equivalência $\conj{H(\omega)}=H(-\omega)$. Com isso, chegamos à relação
+\begin{align*}
+	|H(\omega)|^2&=H(\omega)\conj{H(\omega)};\\
+	&=H(\omega)H(-\omega);\\
+	&=H(s)H(-s)\Big|_{s=j\omega}.
+\end{align*}
+
+Assim, da mesma maneira que fazemos o mapeamento $s=j\omega$, podemos fazer o mapeamento inverso $\omega=-js$. Reescrevendo \equ{buttap}:
+\begin{align}
+	H(s)H(-s)&=\frac{1}{1+(-js)^{2N}};\notag\\
+			 &=\frac{1}{1+(-1)^{2N}j^{2N}s^{2N}};\notag\\
+			 &=\frac{1}{1+(-1)^Ns^{2N}}.
+\end{align}
+
+Os polos de $H(s)H(-s)$ são as raízes de $1+(-1)^Ns^{2N}$, que podem ser escritos por:
+\begin{align}
+	1+(-1)^Ns^{2N}&=0;\notag\\
+	(-1)^Ns^{2N}&=-1;\notag\\
+	(-1)^{2N}s^{2N}&=-1(-1)^N;\notag\\
+	s^{2N}&=(-1)^{N+1}.
+\end{align}
+
+Vamos analisar esses polos para $N=\{1,2,3,4\}$ e averiguar se há algum \eng{insight}.
+
+Tomando $N=1$,
+\begin{align}
+	p^2&=(-1)^{2};\notag\\
+	p^2&=1;\notag\\
+	p^2&=\exp\big(j(0+2\pi k)\big);\notag\\
+	p_k&=\exp(j\pi k)\text{ para }k=0,1;\\
+	p_k&=\pm1.
+\end{align}
+
+Tomando agora $N=2$,
+\begin{align}
+	p^4&=(-1)^{3};\notag\\
+	p^4&=-1;\notag\\
+	p^4&=\exp\big(j(\pi+2\pi k)\big);\notag\\
+	p_k&=\exp\Big(j\frac{\pi}{4}+j\frac{\pi}{2}k\Big)\text{ para }k=0,1,2,3.
+\end{align}
+
+Tomando então $N=3$,
+\begin{align}
+	p^6&=(-1)^{4};\notag\\
+	p^6&=1;\notag\\
+	p^6&=\exp\big(j(0+2\pi k)\big);\notag\\
+	p_k&=\exp\Big(j\frac{\pi}{3}k\Big)\text{ para }k=0,\ldots,5.
+\end{align}
+
+Tomando finalmente $N=4$,
+\begin{align}
+	p^8&=(-1)^{5};\notag\\
+	p^8&=-1;\notag\\
+	p^8&=\exp\big(j(\pi+2\pi k)\big);\notag\\
+	p_k&=\exp\Big(j\frac{\pi}{8}+j\frac{\pi}{4}k\Big)\text{ para }k=0,\ldots,7.
+\end{align}
+
+Analisando as equações anteriores, é possível generalizar\footnote{Com algum esforço e inspiração matemática.} a equação dos polos de $H(s)H(-s)$ para
+\begin{equation}
+	p_k=\exp\bigg(j\frac{N+1}{2N}\pi+k\frac{1}{N}\pi\bigg)\text{ para }k=0,1,\ldots,2N-1,
+\end{equation}
+sendo que $H(s)H(-s)$ pode ser escrita como:
+\begin{equation}
+    H(s)H(-s)=\frac{1}{\displaystyle\prod_{k=0}^{2N-1}(s-p_k)}.
+\end{equation}
+
+A \fig{splane} ilustra as posições dos polos de $H(s)H(-s)$ para $N=\{1,2,3,4\}$. Nela, percebemos polos simétricos em relação à origem do plano $s$. Sem perda de generalidade, vamos considerar que $H(s)$ contém os polos causais e estáveis à esquerda do eixo $j\omega$, enquanto $H(-s)$ contém os polos não"-causais e estáveis (ou causais e instáveis) à direita do eixo $j\omega$.
+
+\begin{figure}[hbtp]
+\centering
+\tikzsetnextfilename{splane}
+\begin{tikzpicture}
+\begin{axis}[title={$N=1$}, name=axis1, width=0.4\textwidth,height=0.4\textwidth, axis equal, axis x line=middle, axis y line=center, xlabel style={anchor=north}, xlabel={$\sigma$}, ylabel={$j\omega$}, xmin=-1.25, xmax=1.25, ymin=-1.25, ymax=1.25, xtick={-1,1}, ticklabel style={anchor=north east}, ytick={-1,1}]
+    \addplot[dashed] gnuplot[id=pcirc, raw gnuplot]{
+	f(x) = sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[dashed] gnuplot[id=ncirc, raw gnuplot]{
+	f(x) = -sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[ultra thick, only marks, mark=x, mark size=6pt] coordinates {(-1,0) (1,0)};
+\end{axis}
+\begin{axis}[title={$N=2$}, name=axis2, at={($(axis1.east)+(1cm,0)$)}, anchor=west, width=0.4\textwidth,height=0.4\textwidth, axis equal, axis x line=middle, axis y line=center, xlabel style={anchor=north}, xlabel={$\sigma$}, ylabel={$j\omega$}, xmin=-1.25, xmax=1.25, ymin=-1.25, ymax=1.25, xtick={-1,1}, ticklabel style={anchor=north east}, ytick={-1,1}]
+    \addplot[dashed] gnuplot[id=pcirc, raw gnuplot]{
+	f(x) = sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[dashed] gnuplot[id=ncirc, raw gnuplot]{
+	f(x) = -sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[ultra thick, only marks, mark=x, mark size=6pt] coordinates {(0.707,0.707) (-0.707,0.707) (-0.707,-0.707) (0.707,-0.707)};
+\end{axis}
+\begin{axis}[title={$N=3$}, name=axis3, at={($(axis1.south)-(0,1cm)$)}, anchor=north, width=0.4\textwidth,height=0.4\textwidth, axis equal, axis x line=middle, axis y line=center, xlabel style={anchor=north}, xlabel={$\sigma$}, ylabel={$j\omega$}, xmin=-1.25, xmax=1.25, ymin=-1.25, ymax=1.25, xtick={-1,1}, ticklabel style={anchor=north east}, ytick={-1,1}]
+    \addplot[dashed] gnuplot[id=pcirc, raw gnuplot]{
+	f(x) = sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[dashed] gnuplot[id=ncirc, raw gnuplot]{
+	f(x) = -sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[ultra thick, only marks, mark=x, mark size=6pt] coordinates {(1,0) (0.5,0.866) (-0.5,0.866) (-1,0) (-0.5,-0.866) (0.5,-0.866)};
+\end{axis}
+\begin{axis}[title={$N=4$}, name=axis4, at={($(axis3.east)+(1cm,0)$)}, anchor=west, width=0.4\textwidth,height=0.4\textwidth, axis equal, axis x line=middle, axis y line=center, xlabel style={anchor=north}, xlabel={$\sigma$}, ylabel={$j\omega$}, xmin=-1.25, xmax=1.25, ymin=-1.25, ymax=1.25, xtick={-1,1}, ticklabel style={anchor=north east}, ytick={-1,1}]
+    \addplot[dashed] gnuplot[id=pcirc, raw gnuplot]{
+	f(x) = sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[dashed] gnuplot[id=ncirc, raw gnuplot]{
+	f(x) = -sqrt(1-x**2);
+	plot[-1:1] f(x)};
+	\addplot[ultra thick, only marks, mark=x, mark size=6pt] coordinates {(0.924,0.383) (0.383,0.924) (-0.924,0.383) (-0.383,0.924) (-0.924,-0.383) (-0.383,-0.924) (0.924,-0.383) (0.383,-0.924)};
+\end{axis}
+\end{tikzpicture}
+\caption{Polos de Butterworth no plano $s$.}
+\label{fig:splane}
+\end{figure}
+
+Com isso, podemos chegar às seguintes relações para o filtro de Butterworth de ordem $N$:
+\begin{equation}\label{eq:buttpoles}
+	\boxed{p_k=\exp\bigg(j\frac{N+1}{2N}\pi+k\frac{1}{N}\pi\bigg)\text{ para }k=0,1,\ldots,N-1,}
+\end{equation}
+com a função de transferência dada por
+\begin{equation}\label{eq:tfbutt}
+	\boxed{H(s)=\frac{1}{\displaystyle\prod_{k=0}^{N-1}(s-p_k)}.}
+\end{equation}
+
+No Matlab\textsuperscript{®}, o Signal Processing Toolbox implementa a \equ{buttpoles} através da função \lstinline{buttap()}.

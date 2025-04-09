@@ -115,7 +115,7 @@ apresentam apenas potências ímpares\footnote{O uso da função $\atan(\cdot)$ 
 
 As respostas em magnitude e em fase podem ser visualizadas nos diagramas de Bode das Figuras~\ref{fig:bodeHlp}--\ref{fig:bodeHsb}.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 	\centering
 	\tikzsetnextfilename{bodeHlp}
 	\begin{tikzpicture}
@@ -136,7 +136,7 @@ As respostas em magnitude e em fase podem ser visualizadas nos diagramas de Bode
 	\label{fig:bodeHlp}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 	\centering
 	\tikzsetnextfilename{bodeHhp}
 	\begin{tikzpicture}
@@ -157,7 +157,7 @@ As respostas em magnitude e em fase podem ser visualizadas nos diagramas de Bode
 	\label{fig:bodeHhp}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 	\centering
 	\tikzsetnextfilename{bodeHbp}
 	\begin{tikzpicture}
@@ -178,7 +178,7 @@ As respostas em magnitude e em fase podem ser visualizadas nos diagramas de Bode
 	\label{fig:bodeHbp}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
 	\centering
 	\tikzsetnextfilename{bodeHsb}
 	\begin{tikzpicture}
@@ -211,6 +211,33 @@ O atraso de fase é definido por
 \end{equation}
 sendo uma grandeza dada em segundos. Embora o atraso de fase seja relevante em algumas aplicações de telecomunicações, seus efeitos não são importantes para a análise de filtros seletivos em frequência. Esse tópico não será expandido.
 
+A \fig{taup} ilustra o efeito do atraso de fase. Nele um pulso senoidal com envelope gaussiano sofre atraso de fase. Entre as curvas preta e cinza, é possível visualizar o deslocamento, porém este efeito não altera o envelope da função (curvas pontilhadas).
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{taup}
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$t$, xmin=0, xmax=6, grid=major]
+			\addplot[gray, thick] gnuplot [id=taup1, raw gnuplot]{%
+				set samples 801;
+				f(x)=exp(-(x-3)**2)*sin(8*pi*x);
+				plot [0:6] f(x)};
+		\addplot[thick] gnuplot [id=taup2, raw gnuplot]{%
+				set samples 801;
+				f(x)=exp(-(x-3)**2)*cos(8*pi*x);
+				plot [0:6] f(x)};
+		\addplot[thick, dotted] gnuplot [id=taup3, raw gnuplot]{%
+				f(x)=exp(-(x-3)**2);
+				plot [0:6] f(x)};
+		\addplot[thick, dotted] gnuplot [id=taup4, raw gnuplot]{%
+				f(x)=-exp(-(x-3)**2);
+				plot [0:6] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Representação do atraso de fase.}
+	\label{fig:taup}
+\end{figure}
+
 \section{Atraso de grupo}
 
 O atraso de fase é definido por
@@ -226,6 +253,65 @@ Considerando as respostas dos filtros analisados neste Capítulo, os atrasos de 
 	H_{\text{PF}}(\omega)\therefore\tau_g(\omega)=\frac{3\tau(1+\tau^2\omega^2)}{1+7\tau^2\omega^2+\tau^4\omega^4};\\
 	H_{\text{RF}}(\omega)\therefore\tau_g(\omega)=\frac{\tau-8\tau^3\omega^2+\tau^5\omega^4}{(1+7\tau^2\omega^2+\tau^4\omega^4)(1+\tau^2\omega^2)}.\raisetag{-1em}
 \end{gather}
+
+A \fig{taug} ilustra o efeito do atraso de grupo. Aqui percebemos o deslocamento do envelope (linhas pontilhada e tracejadas) entre os sinais representados em preto e cinza.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{taug}
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$t$, xmin=0, xmax=8, grid=major]
+			\addplot[gray, thick] gnuplot [id=taug1, raw gnuplot]{%
+				set samples 901;
+				f(x)=exp(-(x-5)**2)*cos(8*pi*x);
+				plot [0:8] f(x)};
+		\addplot[thick] gnuplot [id=taug2, raw gnuplot]{%
+				set samples 901;
+				f(x)=exp(-(x-3)**2)*cos(8*pi*x);
+				plot [0:8] f(x)};
+		\addplot[thick, dotted] gnuplot [id=taug3, raw gnuplot]{%
+				f(x)=exp(-(x-3)**2);
+				plot [0:8] f(x)};
+		\addplot[thick, dotted] gnuplot [id=taug4, raw gnuplot]{%
+				f(x)=-exp(-(x-3)**2);
+				plot [0:8] f(x)};
+		\addplot[thick, dashed] gnuplot [id=taug5, raw gnuplot]{%
+				f(x)=exp(-(x-5)**2);
+				plot [0:8] f(x)};
+		\addplot[thick, dashed] gnuplot [id=taug6, raw gnuplot]{%
+				f(x)=-exp(-(x-5)**2);
+				plot [0:8] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Representação do atraso de grupo.}
+	\label{fig:taug}
+\end{figure}
+
+A \fig{dist} ilustra graficamente os efeitos da distorção de fase pela variação do atraso de grupo. Nela, um sinal bitonal com envelope gaussiano teve a fase de um dos tons alterada. Um ponto notável distinto está no pulso central ($t\approx\num{2.5}$). No sinal original, à esquerda, temos um pico isolado e bem definido. Já no sinal distorcido, à direita, o pico parece ter se subdividido em dois picos menores (\eng{peak splitting}). Esse fenômeno é típico do mau processamento dos sinais de eletrocardiograma, especialmente no complexo QRS.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{dist1}
+	\begin{tikzpicture}
+		\begin{axis}[width=0.35\textwidth, xlabel=$t$, xmin=0, xmax=6, grid=major]
+			\addplot[thick] gnuplot [id=dist1, raw gnuplot]{%
+				set samples 2001;
+				f(x)=0.5*exp(-(x-3)**2)*(cos(4*pi*x)+cos(12*pi*x));
+				plot [0:6] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\tikzsetnextfilename{dist2}
+	\begin{tikzpicture}
+		\begin{axis}[width=0.35\textwidth, xlabel=$t$, xmin=0, xmax=6, grid=major]
+			\addplot[thick] gnuplot [id=dist2, raw gnuplot]{%
+				set samples 2001;
+				f(x)=0.5*exp(-(x-3)**2)*(cos(4*pi*x)+sin(12*pi*x));
+				plot [0:6] f(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Ilustrando a distorção de fase.}
+	\label{fig:dist}
+\end{figure}
 
 \section{Polos da função de transferência}
 
@@ -314,3 +400,124 @@ Essa análise pode ser compreendida da seguinte forma:
 \end{itemize}
 
 \subsection{Par de polos complexos conjugados}
+
+Quando a raiz do denominador é quadrática e irredutível em reais, é comum parametrizá"-la por
+\begin{equation}
+	H(s)=\frac{\omega_0^2}{\displaystyle s^2+\frac{\omega_0}{Q}s+\omega_0^2},
+\end{equation}
+sendo $\omega_0$ a \emph{frequência natural não"-amortecida} ($\omega_0>0$ em \unit{\radian\per\second}) e $Q$ é o fator de qualidade ($Q>0$ adimensional). A presença de $\omega_0^2$ no numerado apenas normaliza a assíntota da resposta em frequência, como será visto a seguir.
+
+Com um denominador quadrático, há três tipos possíveis de resposta, de acordo com o discriminante $\Delta$ da \emph{solução quadrática}\footnote{Conhecida no Brasil, incorretamente, como fórmula de Bhaskara.}
+\begin{equation}
+	\Delta=\frac{\omega_0^2}{Q^2}-4\omega_0^2,
+\end{equation}
+de maneira que:
+\begin{itemize}
+	\item $\Delta>0\implies Q<\frac{1}{2}$ --- duas raízes reais e distintas;
+	\item $\Delta=0\implies Q=\frac{1}{2}$ --- duas raízes reais e iguais;
+	\item $\Delta<0\implies Q>\frac{1}{2}$ --- um par de raízes complexas conjugadas.
+\end{itemize}
+
+Ambas as soluções com raízes reais não são relevantes ao problema de filtragem analógica --- exceto pelo já exposto na Subseção anterior --- e não serão consideradas aqui. A solução com um par de raízes complexas conjugadas, por outro lado, é de grande relevância no projeto de filtros analógicos (e digitais). Tais sistemas são chamados \emph{subamortecidos}.
+
+A resposta temporal de um sistema subamortecido é dada, de uma forma geral, por
+\begin{equation}
+	h(t)=Ae^{-\alpha t}\cos(\beta t+\phi)\quad t\geq0,
+\end{equation}
+com $A$ e $\phi$ constantes a determinar pelo \ac{pvi}, enquanto os parâmetros $\alpha$ e $\beta$ são dados por:
+\begin{gather}
+	\alpha=\frac{\omega_0}{2Q},\\
+	\beta=\frac{\sqrt{4Q^2-1}}{2Q}\omega_0.
+\end{gather}
+
+Aqui nota"-se uma confusão muito comum: a frequência de oscilação $\beta$ depende de $\omega_0$ mas é diferente dela. A frequência $\beta$ é chamada de \emph{frequência natural amortecida}. É simples averiguar que se $Q\to\infty$ então $\beta\to\omega_0$. Porém o fator de qualidade é limitado por aspectos tecnológicos da construção de circuitos e de componentes realizáveis.
+
+A magnitude quadrática do sistema subamortecido é dada por
+\begin{equation}
+	|H(\omega)|^2=\frac{\omega_0^4}{\displaystyle\omega^4+\frac{\omega_0^2-2Q^2\omega_0^2}{Q^2}\omega^2+\omega_0^4},
+\end{equation}
+e o atraso de grupo por
+\begin{equation}
+	\tau_g(\omega)=\frac{\displaystyle\frac{\omega_0}{Q}(\omega^2+\omega_0^2)}{\displaystyle\omega^4+\frac{\omega_0^2-2Q^2\omega_0^2}{Q^2}\omega^2+\omega_0^4}.
+\end{equation}
+
+Aqui, a substituição $\omega=2\pi f$ não beneficia a análise, de maneira que vamos continuar com $\omega$. A análise dos pontos estacionários (derivada nula) de $|H(\omega)|^2$ revela um novo ponto notável: a \emph{frequência de ressonância} $\omega_r$.
+
+A frequência
+\begin{equation}
+	\omega_r=\frac{\omega_0\sqrt{4Q^2-2}}{2Q},
+\end{equation}
+indica um máximo da resposta em magnitude, desde que a condição
+\begin{equation}
+	Q\geq\frac{\sqrt{2}}{2},
+\end{equation}
+seja satisfeita --- lembrando que já assumimos que $Q>\frac{1}{2}$.
+
+Assim, ressalto aqui a potencial confusão de \enquote{frequências} quando lidamos com sistemas subamortecidos: temos a frequência natural não"-amortecida $\omega_0$; a frequência natural amortecida $\beta$ --- observada na resposta temporal; e a frequência de ressonância $\omega_r$ que é um ponto notável no diagrama de Bode. Tanto $beta$ quanto $\omega_r$ convergem para $\omega_0$ se $Q\to\infty$.
+
+O gráfico da \fig{poloConjMag} traz uma pequena coleção de curvas no diagrama de Bode para a resposta em magnitude de um sistema subamortecido com $Q=\{1,2,10\}$. Nele observamos o pico de ressonância na resposta em magnitude, cada vez mais pronunciado, conforme $Q$ aumenta. O comportamento assintótico para $\omega\to0$ é de assentar em \qty{0}{\decibel}, enquanto para $\omega\to\infty$ temos uma reta de \qty{-40}{\decibel\slash dec}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{poloConjMag}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[xlabel=$\omega/\omega_0$, ylabel=$\tau_g(\omega)\slash\unit{\second}$, xmin=0.1, xmax=10, grid=major]
+			\addplot[thick, dotted] gnuplot [id=powPoloConjMagQ1, raw gnuplot]{%
+				set logscale x 10;
+				Q=1.0;
+				g(x)=x**4+(1-2*Q**2)/(Q**2)*x**2+1;
+				f(x)=-10*log10(g(x));
+				plot [0.1:10] f(x)};
+			\addplot[thick, dashed] gnuplot [id=powPoloConjMagQ2, raw gnuplot]{%
+				set logscale x 10;
+				Q=2.0;
+				g(x)=x**4+(1-2*Q**2)/(Q**2)*x**2+1;
+				f(x)=-10*log10(g(x));
+				plot [0.1:10] f(x)};
+			\addplot[thick] gnuplot [id=powPoloConjMagQ3, raw gnuplot]{%
+				set samples 301;
+				set logscale x 10;
+				Q=10.0;
+				g(x)=x**4+(1-2*Q**2)/(Q**2)*x**2+1;
+				f(x)=-10*log10(g(x));
+				plot [0.1:10] f(x)};
+			\legend{$Q=1$, $Q=2$, $Q=10$};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode (magnitude) de um sistema subamortecido.}
+	\label{fig:poloConjMag}
+\end{figure}
+
+Já na \fig{poloConjTaug} representa uma coleção de atrasos de grupo para o sistema subamortecido, também para $Q=\{1,2,10\}$. Aqui vemos que a variação do atraso de grupo possui comportamento similar ao pico de ressonância. Lembramos que a variação de atraso de grupo se traduz como distorção do sinal pelo filtro.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{poloConjTaug}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[xlabel=$\omega/\omega_0$, ylabel=$|H(\omega)|^2\slash\unit{\decibel}$, xmin=0.1, xmax=10, ymin=0, grid=major]
+			\addplot[thick, dotted] gnuplot [id=powPoloConjTaugQ1, raw gnuplot]{%
+				set logscale x 10;
+				Q=1.0;
+				f(x)=(x**2+1)/Q;
+				g(x)=x**4+(1-2*Q**2)/(Q**2)*x**2+1;
+				plot [0.1:10] f(x)/g(x)};
+			\addplot[thick, dashed] gnuplot [id=powPoloConjTaugQ2, raw gnuplot]{%
+				set samples 200;
+				set logscale x 10;
+				Q=2.0;
+				f(x)=(x**2+1)/Q;
+				g(x)=x**4+(1-2*Q**2)/(Q**2)*x**2+1;
+				plot [0.1:10] f(x)/g(x)};
+			\addplot[thick] gnuplot [id=powPoloConjTaugQ3, raw gnuplot]{%
+				set samples 999;
+				set logscale x 10;
+				Q=10.0;
+				f(x)=(x**2+1)/Q;
+				g(x)=x**4+(1-2*Q**2)/(Q**2)*x**2+1;
+				plot [0.1:10] f(x)/g(x)};
+			\legend{$Q=1$, $Q=2$, $Q=10$};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Diagrama de Bode (atraso de grupo) de um sistema subamortecido.}
+	\label{fig:poloConjTaug}
+\end{figure}

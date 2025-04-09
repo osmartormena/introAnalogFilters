@@ -1,0 +1,8 @@
+figures/splane.pdf: figures/splane.pcirc.table
+figures/splane.pdf: figures/splane.ncirc.table
+figures/splane.pdf: figures/splane.pcirc.table
+figures/splane.pdf: figures/splane.ncirc.table
+figures/splane.pdf: figures/splane.pcirc.table
+figures/splane.pdf: figures/splane.ncirc.table
+figures/splane.pdf: figures/splane.pcirc.table
+figures/splane.pdf: figures/splane.ncirc.table

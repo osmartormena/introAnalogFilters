@@ -1,0 +1,3 @@
+figures/poloConjTaug.pdf: figures/poloConjTaug.powPoloConjTaugQ1.table
+figures/poloConjTaug.pdf: figures/poloConjTaug.powPoloConjTaugQ2.table
+figures/poloConjTaug.pdf: figures/poloConjTaug.powPoloConjTaugQ3.table

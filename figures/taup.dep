@@ -1,0 +1,4 @@
+figures/taup.pdf: figures/taup.taup1.table
+figures/taup.pdf: figures/taup.taup2.table
+figures/taup.pdf: figures/taup.taup3.table
+figures/taup.pdf: figures/taup.taup4.table

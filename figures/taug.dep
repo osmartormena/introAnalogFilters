@@ -1,0 +1,6 @@
+figures/taug.pdf: figures/taug.taug1.table
+figures/taug.pdf: figures/taug.taug2.table
+figures/taug.pdf: figures/taug.taug3.table
+figures/taug.pdf: figures/taug.taug4.table
+figures/taug.pdf: figures/taug.taug5.table
+figures/taug.pdf: figures/taug.taug6.table
