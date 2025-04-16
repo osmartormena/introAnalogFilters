@@ -96,49 +96,39 @@ Os polos de $H(s)H(-s)$ são as raízes de $1+(-1)^Ns^{2N}$, que podem ser escri
 	s^{2N}&=(-1)^{N+1}.
 \end{align}
 
-Vamos analisar esses polos para $N=\{1,2,3,4\}$ e averiguar se há algum \eng{insight}.
+Assim, caso $N$ seja ímpar, buscamos as raízes de $s^{2N}=1$. Caso $N$ seja par, buscamos as raízes de $s^{2N}=-1$. Tomando as raízes de $s$ como $p$ (já que são polos do sistema) e aplicando o teorema de De Moivre, vamos analisar esses polos para $N=\{1,2,3,4\}$ e averiguar se há algum \eng{insight} possível.
 
 Tomando $N=1$,
 \begin{align}
 	p^2&=(-1)^{2};\notag\\
 	p^2&=1;\notag\\
-	p^2&=\exp\big(j(0+2\pi k)\big);\notag\\
-	p_k&=\exp(j\pi k)\text{ para }k=0,1;\\
-	p_k&=\pm1.
+	p_n^2&=\exp(j2\pi n);\\
+	p_n&=\exp(j\pi n).
 \end{align}
 
 Tomando agora $N=2$,
 \begin{align}
 	p^4&=(-1)^{3};\notag\\
 	p^4&=-1;\notag\\
-	p^4&=\exp\big(j(\pi+2\pi k)\big);\notag\\
-	p_k&=\exp\Big(j\frac{\pi}{4}+j\frac{\pi}{2}k\Big)\text{ para }k=0,1,2,3.
+	p^4&=\exp\big(j(\pi+2\pi n)\big);\notag\\
+	p_n&=\exp\Big(j\frac{\pi}{4}+j\frac{\pi}{2}n\Big).
 \end{align}
 
 Tomando então $N=3$,
 \begin{align}
 	p^6&=(-1)^{4};\notag\\
 	p^6&=1;\notag\\
-	p^6&=\exp\big(j(0+2\pi k)\big);\notag\\
-	p_k&=\exp\Big(j\frac{\pi}{3}k\Big)\text{ para }k=0,\ldots,5.
+	p^6&=\exp\big(j2\pi n\big);\notag\\
+	p_n&=\exp\Big(j\frac{\pi}{3}n\Big).
 \end{align}
 
 Tomando finalmente $N=4$,
 \begin{align}
 	p^8&=(-1)^{5};\notag\\
 	p^8&=-1;\notag\\
-	p^8&=\exp\big(j(\pi+2\pi k)\big);\notag\\
-	p_k&=\exp\Big(j\frac{\pi}{8}+j\frac{\pi}{4}k\Big)\text{ para }k=0,\ldots,7.
+	p^8&=\exp\big(j(\pi+2\pi n)\big);\notag\\
+	p_n&=\exp\Big(j\frac{\pi}{8}+j\frac{\pi}{4}n\Big).
 \end{align}
-
-Analisando as equações anteriores, é possível generalizar\footnote{Com algum esforço e inspiração matemática.} a equação dos polos de $H(s)H(-s)$ para
-\begin{equation}
-	p_k=\exp\bigg(j\frac{N+1}{2N}\pi+k\frac{1}{N}\pi\bigg)\text{ para }k=0,1,\ldots,2N-1,
-\end{equation}
-sendo que $H(s)H(-s)$ pode ser escrita como:
-\begin{equation}
-    H(s)H(-s)=\frac{1}{\displaystyle\prod_{k=0}^{2N-1}(s-p_k)}.
-\end{equation}
 
 A \fig{splane} ilustra as posições dos polos de $H(s)H(-s)$ para $N=\{1,2,3,4\}$. Nela, percebemos polos simétricos em relação à origem do plano $s$. Sem perda de generalidade, vamos considerar que $H(s)$ contém os polos causais e estáveis à esquerda do eixo $j\omega$, enquanto $H(-s)$ contém os polos não"-causais e estáveis (ou causais e instáveis) à direita do eixo $j\omega$.
 
@@ -183,17 +173,181 @@ A \fig{splane} ilustra as posições dos polos de $H(s)H(-s)$ para $N=\{1,2,3,4\
 	\addplot[ultra thick, only marks, mark=x, mark size=6pt] coordinates {(0.924,0.383) (0.383,0.924) (-0.924,0.383) (-0.383,0.924) (-0.924,-0.383) (-0.383,-0.924) (0.924,-0.383) (0.383,-0.924)};
 \end{axis}
 \end{tikzpicture}
-\caption{Polos de Butterworth no plano $s$.}
+\caption{Polos de $H(s)H(-s)$, para a aproximação de Butterworth, no plano $s$.}
 \label{fig:splane}
 \end{figure}
 
-Com isso, podemos chegar às seguintes relações para o filtro de Butterworth de ordem $N$:
+Percebemos que os polos causais estão no semiplano esquerdo, com uma fase inicial de $\frac{pi}{2}+\frac{\pi}{2N}$, separados entre si por $\frac{\pi}{N}$. Com isso, podemos chegar às seguintes relações para o filtro de Butterworth de ordem $N$:
 \begin{equation}\label{eq:buttpoles}
-	\boxed{p_k=\exp\bigg(j\frac{N+1}{2N}\pi+k\frac{1}{N}\pi\bigg)\text{ para }k=0,1,\ldots,N-1,}
+	\boxed{p_n=\exp\Big(j\frac{\pi}{2}-j\frac{\pi}{2N}+j\frac{\pi}{N}n\Big)\text{ para }n=1,\ldots,N,}
 \end{equation}
 com a função de transferência dada por
 \begin{equation}\label{eq:tfbutt}
-	\boxed{H(s)=\frac{1}{\displaystyle\prod_{k=0}^{N-1}(s-p_k)}.}
+	\boxed{H(s)=\frac{1}{\displaystyle\prod_{n=1}^{N}(s-p_n)}.}
 \end{equation}
 
 No Matlab\textsuperscript{®}, o Signal Processing Toolbox implementa a \equ{buttpoles} através da função \lstinline{buttap()}.
+
+\subsection{Os fatores de qualidade de Butterworth}
+
+A análise das Eqs.~\eqref{eq:buttpoles} e \eqref{eq:tfbutt}, auxiliada pela \fig{splane}, nos permite concluir o seguinte:
+\begin{itemize}
+	\item o fator $(s+1)$, correspondente ao polo real, figura apenas para $N$ ímpar;
+	\item os polos complexos figuram sempre em pares conjugados --- $(s-p_n)(s-\conj{p_n})=(s^2-2\Re(p_n)s+|p_n|^2)$.
+\end{itemize}
+
+O termo $-2\Re(p_n)$ pode ser escrito da forma
+\begin{align}
+	-2\Re(p_n)&=-2\Re\bigg(\exp\Big(j\frac{\pi}{2}-j\frac{\pi}{2N}+j\frac{\pi}{N}n\Big)\bigg)\notag\\
+			  &=2\Re\bigg(\exp\Big(-j\frac{\pi}{2}-j\frac{\pi}{2N}+j\frac{\pi}{N}n\Big)\bigg)\notag\\
+			  &=2\cos\Big(-\frac{\pi}{2}-\frac{\pi}{2N}+\frac{\pi}{N}n\Big)\notag\\
+			  &=2\cos\Big(\frac{2\pi-1}{2N}\pi-\frac{\pi}{2}\Big)\notag\\
+			  &=2\sin\Big(\frac{2\pi-1}{2N}\pi\Big).
+\end{align}
+
+Isso nos permite reescrever as \equ{tfbutt} como:
+\begin{gather}
+	\boxed{H(s)=\frac{1}{\displaystyle(s+1)\prod_{n=1}^{\frac{N-1}{2}}\bigg(s^2+2\sin\Big(\frac{2n-1}{2N}\pi\Big)s+1\bigg)}\text{ para }N\text{ ímpar};}\\
+	\boxed{H(s)=\frac{1}{\displaystyle\prod_{n=1}^{\frac{N}{2}}\bigg(s^2+2\sin\Big(\frac{2n-1}{2N}\pi\Big)s+1\bigg)}\text{ para }N\text{ par}.}
+\end{gather}
+
+Lembrando a parametrização para pares de polos complexos conjugados: $s^2+\frac{\omega_0}{Q}s+\omega_0^2$. Podemos averiguar que para um protótipo passa"-baixas de Butterworth normalizado, $\omega_0=1$~\unit{\radian\per\second}.
+
+Assim, exemplificando para $N=\{1,2,3,4\}$, temos, com $N=1$
+\begin{equation}
+	H(s)=\frac{1}{s+1},
+\end{equation}
+para $N=2$
+\begin{equation}
+	H(s)=\frac{1}{s^2+2\sin\big(\frac{\pi}{4}\big)s+1}=\frac{1}{s^2+\sqrt{2}s+1},
+\end{equation}
+já para $N=3$
+\begin{equation}
+	H(s)=\frac{1}{(s+1)\Big(s^2+2\sin\big(\frac{\pi}{6}\big)s+1\Big)}=\frac{1}{(s+1)(s^2+s+1)},
+\end{equation}
+e, finalmente, para $N=4$
+\begin{align}
+	H(s)&=\frac{1}{\Big(s^2+2\sin\big(\frac{\pi}{8}\big)s+1\Big)\Big(s^2+2\sin\big(\frac{3}{8}\pi\big)s+1\Big)}\notag\\
+		&=\frac{1}{\Big(s^2+\sqrt{2-\sqrt{2}}s+1\Big)\Big(s^2+\sqrt{2+\sqrt{2}}s+1\Big)}.
+\end{align}
+
+Notamos que, para $N=4$, o máximo valor de $Q$ para um filtro de Butterworth passa"-baixas é de, aproximadamente, \num{1.31}.
+
+\section{Aproximação de Chebyshev}
+
+A aproximação de Chebyshev é nomeada em homenagem a matemático russo do século XIX, Pafnuty Lvovich Chebyshev\footnote{Não há consenso geral sobre a transliteração do nome em cirílico. Historicamente, as seguintes versões foram circuladas: Tchebichef, Tchebychev, Tchebycheff, Tschebyschev, Tschebyschef, Tschebyscheff, Čebyčev, Čebyšev, Čebyšëv, Chebysheff, Chebychov e Chebyshov. Essa última, considerada mais apropriada por nativos da língua russa. A transliteração aqui usada é a adotada pela American Mathematical Society (AMS).}. Registros históricos incompletos remetem sua proposição original ao matemático alemão Wilhelm Cauer (1900--1945). Seu livro \emph{Siebschaltungen}, publicado em 1931, faz a primeira menção do uso dos polinômios de Chebyshev na síntese de filtros seletivos em frequência. A maior parte dos trabalhos de Cauer foi perdida durante a guerra.
+
+A magnitude quadrática de um protótipo passa"-baixas normalizado de Chebyshev é dada por
+\begin{equation}
+	|H(\omega)|^2=\frac{1}{1+\varepsilon^2T_N^2(\omega)},
+\end{equation}
+onde $\varepsilon$ é um parâmetro de tolerância na banda de passagem e $T_N(\omega)$ é o polinômio de Chebyshev de primeira espécie, definido por
+\begin{equation}\label{eq:chebpol}
+	T_N(\omega)=\begin{cases}
+		\cos\big(N\cos^{-1}(\omega)\big)\quad&\text{se }|\omega|\leq1;\\
+		\cosh\big(N\cosh^{-1}(\omega)\big)\quad&\text{se }|\omega|>1.
+	\end{cases}
+\end{equation}
+
+Os polinômios de Chebyshev de primeira espécie obedecem à seguinte lei de recursão
+\begin{equation}
+	T_N(\omega)=2\omega T_{N-1}(\omega)-T_{N-2}(\omega),
+\end{equation}
+com $T_0(\omega)=1$ e $T_1(\omega)=\omega$.
+
+A \equ{chebpol} evidencia que $T_N(\omega)$ varia entre $1$ e $-1$ para $\omega<1$ (ou seja, na banda de passagem). Assim, $T_N^2(\omega)$ varia entre $0$ e $1$ na banda de passagem. Considerando a atenuação do filtro de Chebyshev
+\begin{equation}
+	A(\omega)=1+\varepsilon^2T_N^2(\omega),
+\end{equation}
+a \fig{achebap} representa sua atenuação para $N=\{1,2,3,4\}$, com \eng{ripple} de banda de passagem $R_p$ (em \unit{\decibel}), dado por
+\begin{equation}
+	R_p=10\log(1+\varepsilon^2).
+\end{equation}
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{achebap}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[xlabel=$\omega$\slash(\unit{\radian\per\second}), ylabel=$A(\omega)$\slash\unit{\decibel}, xmin=0.01, xmax=100, ymin=0, ymax=40, ytick={0,3.01,10,20,30,40}, yticklabels={0,$R_p$,10,20,30,40}, grid=major, legend pos=north west]
+			\addplot[thick, dotted] gnuplot [id=achebap1, raw gnuplot]{%
+				set logscale x 10;
+				N = 1;
+				epsilon = 1;
+				f(x)=1+epsilon**2*cosh(N*acosh(x))**2;
+				plot [0.01:100] 10*log10(f(x))};
+			\addplot[thick, dashdotted] gnuplot [id=achebap2, raw gnuplot]{%
+				set logscale x 10;
+				N = 2;
+				epsilon = 1;
+				f(x)=1+epsilon**2*cosh(N*acosh(x))**2;
+				plot [0.01:7] 10*log10(f(x))};
+			\addplot[thick, dashed] gnuplot [id=achebap3, raw gnuplot]{%
+				set logscale x 10;
+				N = 3;
+				epsilon = 1;
+				f(x)=1+epsilon**2*cosh(N*acosh(x))**2;
+				plot [0.01:3] 10*log10(f(x))};
+			\addplot[thick] gnuplot [id=achebap4, raw gnuplot]{%
+				set logscale x 10;
+				N = 4;
+				epsilon = 1;
+				f(x)=1+epsilon**2*cosh(N*acosh(x))**2;
+				plot [0.01:2] 10*log10(f(x))};
+			\legend{$N=1$, $N=2$, $N=3$, $N=4$};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Atenuação do filtro de Chebyshev --- $R_p$ exagerado para visualização da oscilação em banda de passagem.}
+	\label{fig:achebap}
+\end{figure}
+
+A apresentação da obtenção dos polos do filtro de Chebyshev é razoavelmente mais envolvida que a de Butterworth. Por essa razão, ela não será apresentada em detalhe. Para nossos propósitos, o Signal Processing Toolbox oferece a função \lstinline{cheb1ap()} que faz o cálculo dos polos.
+
+\section{Aproximação de Bessel}
+
+Nomeado em honra ao matemático alemão Friedrich Wilhelm Bessel (1784--1846). Dentre seus pioneiros, destacam"-se Z.\ Kiyasu e W.E.\ Thomson que, em 1943 e 1949, respectivamente, aplicaram as funções de Bessel ao projeto de filtros seletivos em frequência.
+
+Diferentemente das aproximações de Butterworth e Chebyshev, que são definidas em termos da resposta em magntiude, as resposta de um filtro de Bessel é descrita por sua característica de fase. Particularmente, a aproximação de Bessel provê um atraso de grupo \emph{maximamente plano} na banda de passagem.
+
+Ou seja, o desenvolvimento do filtro de Bessel segue linhas similares às do de Butterworth, porém, substituindo as características da magnitude quadrática pelos do atraso de grupo. Os pioneiros Kiyasu e Thomson foram os primeiros a perceber que os polinômios de Bessel reuniam essas características.
+
+A função de transferência do filtro de Bessel é dada por
+\begin{equation}
+	H(s)=\frac{B_N(0)}{B_N(s)}=\frac{b_0}{\displaystyle\sum_{n=0}^Nb_ns^n},
+\end{equation}
+sendo
+\begin{equation}
+	b_n=\frac{(2N-n)!}{2^{N-n}n!(N-n)!}
+\end{equation}
+e $B_N(s)$ é o polinômio de Bessel de ordem $N$. Os polinomios de Bessel obedecem à recursão
+\begin{equation}
+	B_N(s)=(2N-1)B_{N-1}+s^2B_{N-2}(s),
+\end{equation}
+com $B_0(s)=1$ e $B_1(s)=s+1$.
+
+No Signal Processing Toolbox, a função \lstinline{besselap()}\footnote{Os polos produzidos por \lstinline{besselap()} são escalados para que o comportamento assintótico do filtro de Bessel se sobreponha ao de Butterworth.} calcula os polos do filtro de Bessel. A \fig{taugbessel} ilustra os atrasos de grupo para $N=\{1,2,3,4\}$ para um protótipo passa"-baixas normalizado de Bessel.
+
+\begin{figure}[ht]
+	\centering
+	\tikzsetnextfilename{taugbessel}
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[xlabel=$\omega$\slash(\unit{\radian\per\second}), ylabel=$\tau_g(\omega)$\slash\unit{\second}, xmin=0.01, xmax=100, grid=major]
+			\addplot[thick, dotted] gnuplot [raw gnuplot]{%
+				set logscale x 10;
+				plot 'data/taugbessel.dat' using 1:2};
+			\addplot[thick, dashdotted] gnuplot [raw gnuplot]{%
+				set logscale x 10;
+				plot 'data/taugbessel.dat' using 1:3};
+			\addplot[thick, dashed] gnuplot [raw gnuplot]{%
+				set logscale x 10;
+				plot 'data/taugbessel.dat' using 1:4};
+			\addplot[thick] gnuplot [raw gnuplot]{%
+				set logscale x 10;
+				plot 'data/taugbessel.dat' using 1:5};
+			\legend{$N=1$, $N=2$, $N=3$, $N=4$};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+	\caption{Atraso de grupo do protótipo passa"-baixas normalizado de Bessel.}
+	\label{fig:taugbessel}
+\end{figure}
+
+A análise da \fig{taugbessel} nos informa que, para um filtro de Bessel, a \enquote{planaridade} do atraso de grupo melhora com o aumento da ordem. Essa é uma característica distinta deste filtro. Como veremos mais adiante, as aproximações de Butterworth e Chebyshev possuem características de fase mais pobres com o aumento da ordem.

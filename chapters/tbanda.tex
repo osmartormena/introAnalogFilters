@@ -1,0 +1,88 @@
+\chapter{Transformações de banda}
+
+Em nossa motivação, baseada em circuitos RC simples, foi possível averiguar a resposta em frequência de filtros passa"-baixas, passa"-altas, passa"-faixa e rejeita"-faixa. Por simplicidade, ao abordar as aproximações de Butterworth, Chebyshev e Bessel, trabalhamos com protótipos passa"-baixas normalizados. No último Capítulo, fomos apresentados aos equacionamentos de ordem (e frequência de corte, se aplicável) a partir das especificações do filtro.
+
+Neste Capítulo, daremos o último passo da síntese dos filtros: a desnormalização e transformação de banda. Nem sempre desejamos um filtro passa"-baixas e quase nunca temos utilidade para um normalizado.
+
+\section{Desnormalização do protótipo passa"-baixas}
+
+A desnormalização de um protótipo passa"-baixas consiste de um simples remapeamento em $s$ na função de transferência $H(s)$. Tomando o mapeamento
+\begin{equation}
+	s\mapsto\frac{s}{\omega_n},
+\end{equation}
+ele pode ser aplicado a um protótipo, como o Butterworth de ordem unitária:
+\begin{align*}
+	H(s)&=\frac{1}{s+1}\Bigg|_{s=\frac{s}{\omega_n}}=\frac{1}{\displaystyle\frac{s}{\omega_n}+1};\\
+	H(s)&=\frac{\omega_n}{s+\omega_n},
+\end{align*}
+onde $\omega_n$ (em \unit{\radian\per\second}) será a nova frequência de corte do filtro passa"-baixas.
+
+A função \lstinline{lp2lp()} do Singal Processing Toolbox realiza a desnormalização de um protótipo passa"-baixas.
+
+\section{Conversão para passa"-altas}
+
+O remapeamento em $s$ da função de transferência $H(s)$ para conversão entre um protótipo passa"-baixas normalizado para um filtro passa"-altas é dado por
+\begin{equation}
+	s\mapsto\frac{\omega_n}{s}.
+\end{equation}
+
+Novamente, para ilustrar, vamos transformar um protótipo Butterworth de ordem unitária:
+\begin{align*}
+	H(s)&=\frac{1}{s+1}\Bigg|_{s=\frac{\omega_n}{s}}=\frac{1}{\displaystyle\frac{\omega_n}{s}+1};\\
+	H(s)&=\frac{s}{s+\omega_n},
+\end{align*}
+cuja forma é idêntica à função de transferência do circuito da \fig{Hhp}.
+
+A função \lstinline{lp2hp()} do Singal Processing Toolbox realiza a transformação de banda para um filtro passa"-altas.
+
+\section{Conversão para passa"-faixa}
+
+O remapeamento em $s$ da função de transferência $H(s)$ para conversão entre um protótipo passa"-baixas normalizado para um filtro passa"-faixa é dado por
+\begin{equation}
+	s\mapsto\frac{\omega_n}{BW}\frac{s^2+1}{s},
+\end{equation}
+onde $\omega_n$, neste contexto, é a frequência central da banda, dada pela média geométrica dos limites da banda de passagem $\omega_{p,1}$ e $\omega_{p,2}$
+\begin{equation}
+	\omega_n=\sqrt{\omega_{p,1}\omega_{p,2}},
+\end{equation}
+enquanto $BW$ é a largura de banda, dada pela diferença entre $\omega_{p,2}$ e $\omega_{p,1}$
+\begin{equation}
+	BW=\omega_{p,2}-\omega_{p,1}.
+\end{equation}
+
+Mais uma vez, para ilustrar, vamos transformar um protótipo Butterworth de ordem unitária:
+\begin{align*}
+	H(s)&=\frac{1}{s+1}\Bigg|_{s=\frac{\omega_n}{BW}\frac{s^2+1}{s}}=\frac{1}{\displaystyle\frac{\omega_n}{BW}\frac{s^2+1}{s}+1};\\
+	H(s)&=\frac{BWs}{\omega_ns^2+BWs+\omega_n}=\frac{\displaystyle\frac{BW}{\omega_n}s}{\displaystyle s^2+\frac{BW}{\omega_n}s+1},
+\end{align*}
+cuja forma é idêntica à função de transferência do circuito da \fig{Hbp}. Ressalto aqui que a grandeza $\omega_n\slash BW\approx Q$ para $Q$ suficientemente alto.
+
+A função \lstinline{lp2bp()} do Singal Processing Toolbox realiza a transformação de banda para um filtro passa"-faixa.
+
+\section{Conversão para rejeita"-faixa}
+
+O remapeamento em $s$ da função de transferência $H(s)$ para conversão entre um protótipo passa"-baixas normalizado para um filtro rejeita"-faixa é dado por
+\begin{equation}
+	s\mapsto\frac{BW}{\omega_n}\frac{s}{s^2+1},
+\end{equation}
+onde $\omega_n$, neste contexto, é a frequência central da banda, dada pela média geométrica dos limites da banda de rejeição $\omega_{s,1}$ e $\omega_{s,2}$
+\begin{equation}
+	\omega_n=\sqrt{\omega_{s,1}\omega_{s,2}},
+\end{equation}
+enquanto $BW$ é a largura de banda, dada pela diferença entre $\omega_{s,2}$ e $\omega_{s,1}$
+\begin{equation}
+	BW=\omega_{s,2}-\omega_{s,1}.
+\end{equation}
+
+Uma última vez, para ilustrar, vamos transformar um protótipo Butterworth de ordem unitária:
+\begin{align*}
+	H(s)&=\frac{1}{s+1}\Bigg|_{s=\frac{BW}{\omega_n}\frac{s}{s^2+1}}=\frac{1}{\displaystyle\frac{BW}{\omega_n}\frac{s}{s^2+1}+1};\\
+	H(s)&=\frac{\omega_n(s^2+1)}{\omega_ns^2+BWs+\omega_n}=\frac{s^2+1}{\displaystyle s^2+\frac{BW}{\omega_n}s+1},
+\end{align*}
+cuja forma é idêntica à função de transferência do circuito da \fig{Hsb}.
+
+A função \lstinline{lp2bs()} do Singal Processing Toolbox realiza a transformação de banda para um filtro passa"-faixa.
+
+\section{Síntese de filtros analógicos}
+
+Um \eng{script} especializado no Matlab\textsuperscript{®} será disponibilizado para a síntese de filtros de Butterworth, Chebyshev e Bessel. Ele fará uso das funções \lstinline{butter()}, \lstinline{cheby1()} e \lstinline{besself()} do Signal Processing Toolbox.

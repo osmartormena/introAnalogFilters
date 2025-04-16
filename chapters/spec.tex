@@ -1,0 +1,142 @@
+\chapter[Especificação]{Especificação da resposta em frequência}
+
+Aos leitores (ainda) interessados, o Capítulo anterior nos oferece um vislumbre sobre a aplicabilidade de toda a teoria desenvolvida até o momento. Infelizmente, protótipos passa"-baixas normalizados não possuem um amplo leque de aplicação. Precisamos desnormalizar os filtros passa"-baixas e\slash ou fazer uma transformação de banda para obter filtros passa"-altas, passa"-faixa ou rejeita"-faixa.
+
+Porém, antes de discutir a desnormalização e a tranformação de banda, precisamos dar definição à especificação do filtro. Neste capítulo iremos apresentar os parâmetros para especificação da resposta em magnitude dos filtros de Butterworth e Chebyshev. Filtros de Bessel são, comumente, projetados de forma interativa e recursiva.
+
+\section{Filtro passa"-baixas}
+
+Um filtro passa"-baixas pode ser especificado por sua atenuação (inverso da magnitude quadrática, conforme definido no Capítulo anterior). A \fig{pb} ilustra a especificação da resposta em magnitude de um filtro passa"-baixas. Um filtro com resposta aceitável não deve se sobrepor às áreas hachuradas.
+
+\begin{figure}[ht]
+\centering
+\tikzsetnextfilename{pb}
+\begin{tikzpicture}
+	\begin{axis}[xlabel=$f$\slash\unit{\hertz}, ylabel=$A(\omega)$\slash\unit{\decibel}, xmin=0, xmax=1, ymin=0, ymax=1, xtick={0, 0.4, 0.5}, xticklabels={$0$, $f_p$, $f_s$}, ytick={0, 0.1, 0.9}, yticklabels={$0$, $R_p$, $R_s$}, tick label style={font=\normalsize}]
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0, 0.1) (0.4, 0.1) (0.4, 1) (0, 1)};
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0.5, 0) (0.5, 0.9) (1, 0.9) (1, 0)};
+\end{axis}
+\end{tikzpicture}
+\caption{Especificação passa"-baixas.}
+\label{fig:pb}
+\end{figure}
+
+Os parâmetros $f_p$ e $f_s$ (em \unit{\hertz}) marcam os limites das bandas de passagem (\eng{passband}) e rejeição (\eng{stopband}), respectivamente. Já os parâmetros $R_p$ e $R_s$ (em \unit{\decibel}) representam as tolerâncias (\eng{ripple}) da banda de passagem e de rejeição, respectivamente. O parâmetro $R_s$ também é comumente chamado de \emph{atenuação mínima}.
+
+O quarteto $\{f_p,f_s,R_p,R_s\}$ determinam a resposta em magnitude de um filtro passa"-baixas. Caso necessário, valores correspondentes de $\omega_p$ e $\omega_s$ (em \unit{\radian\per\second}) podem ser obtidos prontamente de $f_p$ e $f_s$, respectivamente. A partir deles, a ordem $N$ de um filtro e sua frequência de corte podem ser definidas.
+
+\subsection{Exemplo com filtro de Butterworth}
+
+Tomando como exemplo o filtro de Butterworth passa"-baixas com frequência de corte $\omega_c$ (em \unit{\radian\per\second}), cuja atenuação é dada por
+\begin{equation}
+	A(\omega)=1+\Big(\frac{\omega}{\omega_c}\Big)^{2N}.
+\end{equation}
+
+Analisando a \fig{pb}, é possível definir duas inequações:
+\begin{align}
+	A(\omega_p)&=1+\Big(\frac{\omega_p}{\omega_c}\Big)^{2N}\leq10^{R_p/10};\\
+	A(\omega_s)&=1+\Big(\frac{\omega_s}{\omega_c}\Big)^{2N}\geq10^{R_s/10}.
+\end{align}
+
+Vamos assumir, por hora, que essas inequações possam ser reduzidas para equações. Isolando o termo comum:
+\begin{align*}
+	1+\Big(\frac{\omega_p}{\omega_c}\Big)^{2N}&=10^{R_p/10};\\
+	\Big(\frac{\omega_p}{\omega_c}\Big)^{2N}&=10^{R_p/10}-1;\\
+	\log\Big(\frac{\omega_p}{\omega_c}\Big)^{2N}&=\log\big(10^{R_p/10}-1\big);\\
+	2N\log\Big(\frac{\omega_p}{\omega_c}\Big)&=\log\big(10^{R_p/10}-1\big);\\
+	2N\log(\omega_p)-2N\log(\omega_c)&=\log\big(10^{R_p/10}-1\big);\\
+	2N\log(\omega_c)&=2N\log(\omega_p)-\log\big(10^{R_p/10}-1\big)
+\end{align*}
+e, por outro lado
+\begin{align*}
+	1+\Big(\frac{\omega_s}{\omega_c}\Big)^{2N}&=10^{R_s/10};\\
+	\Big(\frac{\omega_s}{\omega_c}\Big)^{2N}&=10^{R_s/10}-1;\\
+	\log\Big(\frac{\omega_s}{\omega_c}\Big)^{2N}&=\log\big(10^{R_s/10}-1\big);\\
+	2N\log\Big(\frac{\omega_s}{\omega_c}\Big)&=\log\big(10^{R_s/10}-1\big);\\
+	2N\log(\omega_s)-2N\log(\omega_c)&=\log\big(10^{R_s/10}-1\big);\\
+	2N\log(\omega_c)&=2N\log(\omega_s)-\log\big(10^{R_s/10}-1\big).
+\end{align*}
+
+Igualando ambas as expressões para $2N$:
+\begin{align*}
+	2N\log(\omega_p)-\log\big(10^{R_p/10}-1\big)&=2N\log(\omega_s)-\log\big(10^{R_s/10}-1\big);\\
+	2N\log(\omega_p)-2N\log(\omega_s)&=\log\big(10^{R_p/10}-1\big)-\log\big(10^{R_s/10}-1\big);\\
+	2N\log\big(\omega_p/\omega_s\big)&=\log\big((10^{R_p/10}-1)/(10^{R_s/10}-1)\big);\\
+	N&=\frac{\displaystyle\log\Big(\frac{10^{R_p/10}-1}{10^{R_s/10}-1}\Big)}{\displaystyle2\log\Big(\frac{\omega_p}{\omega_s}\Big)}.
+\end{align*}
+
+Como $N\in\mathbb{N}^*$, faz"-se necessário arredondar esse cálcula para cima:
+\begin{equation}\label{eq:buttord}
+	\boxed{N=\left\lceil\frac{\displaystyle\log\Big(\frac{10^{R_p/10}-1}{10^{R_s/10}-1}\Big)}{\displaystyle2\log\Big(\frac{\omega_p}{\omega_s}\Big)}\right\rceil.}
+\end{equation}
+
+Com a \emph{margem de projeto} obtida pelo arredondamento para cima de $N$, por razões de ordem prática, $\omega_c$ é calculado para atender exatamente o critério de rejeição, deixando uma \enquote{folga} para o critério de passagem.
+
+\begin{align*}
+	2N\log\Big(\frac{\omega_s}{\omega_c}\Big)&=\log\big(10^{R_s/10}-1\big);\\
+	\log\Big(\frac{\omega_s}{\omega_c}\Big)&=\frac{\log\big(10^{R_s/10}-1\big)}{2N};\\
+	\frac{\omega_s}{\omega_c}&=\sqrt[2N]{10^{R_s/10}-1};\\
+	\omega_c&=\frac{\omega_s}{\sqrt[2N]{10^{R_s/10}-1}};
+\end{align*}
+
+Assim, a frequência de corte $f_c$ (em \unit{\hertz}), pode ser dada por
+\begin{equation}\label{eq:buttfc}
+	\boxed{f_c=\frac{f_s}{\sqrt[2N]{10^{R_s/10}-1}}.}
+\end{equation}
+
+A função \lstinline{buttord()} do Signal Processing Toolbox realiza essas operações para o filtro de Butterworth. Já a função \lstinline{cheb1ord()} faz o mesmo para o filtro de Chebyshev.
+
+\section{Filtro passa"-altas}
+
+A \fig{pa} representa a especificação de um filtros passa"-altas. Mais uma vez, a especificação é determinada pelo quarteto de parâmetros $f_p$, $f_s$, $R_p$ e $R_s$. O equacionamento para este caso não será desenvolvido.
+
+\begin{figure}[ht]
+\centering
+\tikzsetnextfilename{pa}
+\begin{tikzpicture}
+	\begin{axis}[xlabel=$f$\slash\unit{\hertz}, ylabel=$A(\omega)$\slash\unit{\decibel}, xmin=0, xmax=1, ymin=0, ymax=1, xtick={0, 0.4, 0.5}, xticklabels={$0$, $f_s$, $f_p$}, ytick={0, 0.1, 0.9}, yticklabels={$0$, $R_p$, $R_s$}, tick label style={font=\normalsize}]
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0, 0) (0.4, 0) (0.4, 0.9) (0, 0.9)};
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(1, 1) (0.5, 1) (0.5, 0.1) (1, 0.1)};
+\end{axis}
+\end{tikzpicture}
+\caption{Especificação passa"-altas.}
+\label{fig:pa}
+\end{figure}
+
+\section{Filtro passa"-faixa}
+
+O filtro passa"-faixa possui duas bandas de transição: a primeira entre $f_{s,1}$ e $f_{p,1}$ e a segunda entre $f_{s,2}$ e $f_{p,2}$. O equacionamento é similar aos casos de uma única banda, pois a ordem é definida pelo atendimento do pior caso. A \fig{pf} ilustra a relação entre os parâmetros. Mais uma vez, o equacionamento completo não será exposto.
+
+\begin{figure}[ht]
+\centering
+\tikzsetnextfilename{pf}
+\begin{tikzpicture}
+	\begin{axis}[xlabel=$f$\slash\unit{\hertz}, ylabel=$A(\omega)$\slash\unit{\decibel}, xmin=0, xmax=1, ymin=0, ymax=1, xtick={0, 0.3, 0.4, 0.6, 0.7}, xticklabels={$0$, $f_{s,1}$, $f_{p,1}$, $f_{p,2}$, $f_{s,2}$}, ytick={0, 0.1, 0.9}, yticklabels={$0$, $R_p$, $R_s$}, tick label style={font=\normalsize}]
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0, 0.9) (0.3, 0.9) (0.3, 0) (0, 0)};
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0.4, 1) (0.4, 0.1) (0.6, 0.1) (0.6, 1)};
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0.7, 0) (0.7, 0.9) (1, 0.9) (1, 0)};
+\end{axis}
+\end{tikzpicture}
+\caption{Especificação passa"-faixa.}
+\label{fig:pf}
+\end{figure}
+
+\section{Filtro rejeita"-faixa}
+
+Finalmente, a \fig{rf} ilustra a especificação de um filtro rejeita"-faixa. Assim como no passa"-faixa, há duas bandas de transição. Novamente, o equacionamento não será desenvolvido.
+
+\begin{figure}[ht]
+\centering
+\tikzsetnextfilename{rf}
+\begin{tikzpicture}
+	\begin{axis}[xlabel=$f$\slash\unit{\hertz}, ylabel=$A(\omega)$\slash\unit{\decibel}, xmin=0, xmax=1, ymin=0, ymax=1, xtick={0, 0.3, 0.4, 0.6, 0.7}, xticklabels={$0$, $f_{p,1}$, $f_{s,1}$, $f_{s,2}$, $f_{p,2}$}, ytick={0, 0.1, 0.9}, yticklabels={$0$, $R_p$, $R_s$}, tick label style={font=\normalsize}]
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0, 0.1) (0.3, 0.1) (0.3, 1) (0, 1)};
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(0.4, 0) (0.4, 0.9) (0.6, 0.9) (0.6, 0)};
+    \addplot[pattern=crosshatch dots, pattern color=black, draw=black] coordinates{(1, 1) (0.7, 1) (0.7, 0.1) (1, 0.1)};
+\end{axis}
+\end{tikzpicture}
+\caption{Especificação rejeita"-faixa.}
+\label{fig:rf}
+\end{figure}
+
+Um \eng{live script} especializado do Matlab\textsuperscript{®}, fazendo uso das funções do Signal Processing Toolbox, será disponibilizado. Esse \eng{script} contemplará a tomada dos parâmetros de especificação e o retorno da ordem e frequência de corte (quando aplicável) para nossos filtros.

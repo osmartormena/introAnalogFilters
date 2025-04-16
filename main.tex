@@ -19,7 +19,14 @@
 	}
 	\UseMicrotypeSet[protrusion]{lmodern}
 \usepackage{graphicx}
+\usepackage{longtable}
 \usepackage{acro}
+	\acsetup{%
+		list/template = longtable,
+		templates/colspec = {@{}>{}lp{.8\linewidth}@{}},
+		list/heading = chapter*,
+		list/name = Lista de abreviaturas e siglas
+	}
 	\DeclareAcronym{edo}{short=EDO,%
 		long=Equações Diferenciais Ordinárias Lineares e com Coeficientes Constantes}
 	\DeclareAcronym{pvi}{short=p.v.i.{},%
@@ -45,7 +52,7 @@
 	\pgfplotsset{compat=1.18}
 	\pgfplotsset{every axis/.append style={width=0.8\textwidth,height=0.5\textwidth,scale only axis,/pgf/number format/.cd,use comma}}
 	\pgfplotsset{every tick label/.append style={font=\footnotesize}}
-	\usetikzlibrary{external}
+	\usetikzlibrary{external,patterns}
 	\tikzsetexternalprefix{figures/}
 	\tikzset{/tikz/external/up to date check=md5}
 	\tikzexternalize
@@ -61,7 +68,9 @@
 \checkandfixthelayout
 
 \makeatletter
-\renewcommand*{\sin}{\mathop{\operator@font sen}\nolimits}
+\DeclareRobustCommand{\em}%
+{\@nomath\em \ifdim \fontdimen\@ne\font >\z@ \upshape \else \slshape \fi}
+\DeclareRobustCommand\sin{\mathop{\operator@font sen}\nolimits}
 \makeatother
 
 \allowdisplaybreaks[1]
@@ -76,20 +85,38 @@
 \newcommand*{\inte}[4]{\ensuremath\int_{#3}^{#4}#1\,\mathrm{d}#2}
 \newcommand*{\res}{\ensuremath\operatorname{Res}}
 
+\renewcommand\frontmatter{%
+	\pagenumbering{arabic}%
+	\pagestyle{empty}%
+	\copypagestyle{chapter}{empty}%
+}
+\renewcommand\mainmatter{%
+	\copypagestyle{chapter}{empty}%
+	\pagestyle{headings}%
+}
+
 \title{Introdução aos filtros analógicos: análise de circuitos, resposta em frequência e síntese}
 \author{Osmar Tormena Júnior, Prof.\ Dr.}
 \date{2025}
 
 \begin{document}
 
-\maketitle\clearpage
+\setcounter{page}{0}
+\maketitle
+\thispagestyle{empty}
+\clearpage
 
+\frontmatter
+\listoffigures*\clearpage
+\setlength\LTleft{0pt}\printacronyms\clearpage
 \tableofcontents*\clearpage
-\listoffigures
 
+\mainmatter
 \include{chapters/laplace.tex}
 \include{chapters/fourier.tex}
 \include{chapters/freqs.tex}
 \include{chapters/aprox.tex}
+\include{chapters/spec.tex}
+\include{chapters/tbanda.tex}
 
 \end{document}

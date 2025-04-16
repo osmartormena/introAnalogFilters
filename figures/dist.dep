@@ -1,2 +1,0 @@
-figures/dist.pdf: figures/dist.dist1.table
-figures/dist.pdf: figures/dist.dist2.table
