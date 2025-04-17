@@ -1,3 +1,9 @@
+## macOS hidden files:
+.DS_Store
+
+## Some additional latex auxiliary files:
+*.dep
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
