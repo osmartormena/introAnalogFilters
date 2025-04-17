@@ -3,6 +3,7 @@
 
 ## Some additional latex auxiliary files:
 *.dep
+*.latexmain
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
